@@ -129,7 +129,8 @@ function borrarPersonaje(personaje)
         personajes.splice(index, 1);
 
         alert("Personaje:\n\n" + personajeToString(personaje) + "\n\nfue borrada de la tabla");
-        borrarFilaSeleccionada($("#tablaPersonajes"));
+
+        $("#filaSeleccionada").remove();
     }
   
     ocultarFormulario();
@@ -436,15 +437,6 @@ function blanquearFila()
         //filaSeleccionada.removeAttr("id");
         $("#filaSeleccionada").removeAttr("id");
     //}
-}
-
-//Elimina de la tabla de personajes la fila seleccionada por el usuario.
-//Esta función la invoca la opción de borrar una personaje del servidor,
-//una vez devuelto el ok del mismo.
-function borrarFilaSeleccionada(tabla)
-{
-    //tabla.remove($("#filaSeleccionada"));
-    $("#filaSeleccionada").remove();
 }
 
 //Modifica los datos de la fila seleccionada con los datos de la personaje pasada por parámetro.
