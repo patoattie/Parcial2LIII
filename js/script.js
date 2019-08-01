@@ -27,7 +27,7 @@ function traerPersonajes()
 {
     activarMenu($("#btnGetPersonajes"));
     var storage = JSON.parse(localStorage.getItem("personajes"));
-    $("#info").innerHTML = "";
+    $("#info").html("");
 
     personajes = [];
 
@@ -63,16 +63,10 @@ function personajeEditado()
         switch(atributo)
         {
             case "casa":
-                for(var i = 0; i < casas.length; i++)
-                {
-                    if($("#opt" + casas[i]).checked)
-                    {
-                        personaje["casa"] = casas[i];
-                    }
-                }
+                personaje["casa"] = $("input[name=casa]:checked", '#grupoCasa').val();
                 break;
             case "traidor":
-                personaje["traidor"] = $("#chkTraidor").checked;
+                personaje["traidor"] = $("#chkTraidor").prop("checked");
                 break;
             default:
                 var atributoCapitalizado = atributo.charAt(0).toUpperCase() + atributo.slice(1).toLowerCase(); //Primer letra en mayuscula, resto minuscula
@@ -411,35 +405,37 @@ function crearDetalle(tablaPersonajes, datos)
 //el atributo id a la fila y carga la personaje en el array de personaje seleccionada.
 function seleccionarFila()
 {
+    var filaActual = $(this);
     //$("#btnEditarPersonaje").removeAttr("disabled");
     $("#btnEditarPersonaje").css("pointer-events", "auto");
     blanquearFila();
     
-    this.attr("id", "filaSeleccionada");
+    filaActual.attr("id", "filaSeleccionada");
 
     //Recorro las columnas de la fila seleccionada, guardando un atributo por columna en personajeSeleccionado.
-    for(var i = 0; i < this.children().length; i++)
+    filaActual.children().each(function()
     {
-        if(this.children().attr("class") == "traidor")
+        if($(this).attr("class") == "traidor")
         {
-            personajeSeleccionado[this.children().attr("class")] = (this.children().text("Si"));
+            personajeSeleccionado[$(this).attr("class")] = ($(this).text() == "Si");
         }
         else
         {
-            personajeSeleccionado[this.children().attr("class")] = this.children().text();
+            personajeSeleccionado[$(this).attr("class")] = $(this).text();
         }
-    }
+    });
 }
 
 //Quita el atributo id de la fila seleccionada.
 function blanquearFila()
 {
-    var filaSeleccionada = $("#filaSeleccionada");
+    //var filaSeleccionada = $("#filaSeleccionada");
 
-    if(filaSeleccionada) //Si hay una fila seleccionada, le quito el id
-    {
-        filaSeleccionada.removeAttr("id");
-    }
+    //if(filaSeleccionada) //Si hay una fila seleccionada, le quito el id
+    //{
+        //filaSeleccionada.removeAttr("id");
+        $("#filaSeleccionada").removeAttr("id");
+    //}
 }
 
 //Elimina de la tabla de personajes la fila seleccionada por el usuario.
@@ -458,24 +454,25 @@ function modificarFilaSeleccionada(datos)
     var filaSeleccionada = $("#filaSeleccionada");
 
     //Recorro las columnas de la fila seleccionada, guardando un atributo por columna en personajeSeleccionado.
-    for(var i = 0; i < filaSeleccionada.children().length; i++)
+    //for(var i = 0; i < filaSeleccionada.children().length; i++)
+    filaSeleccionada.children().each(function()
     {
-        if(filaSeleccionada.children().attr("class") == "traidor")
+        if($(this).attr("class") == "traidor")
         {
-            if(datos[filaSeleccionada.children().attr("class")])
+            if(datos[$(this).attr("class")])
             {
-                filaSeleccionada.children().text("Si");
+                $(this).text("Si");
             }
             else
             {
-                filaSeleccionada.children().text("No");
+                $(this).text("No");
             }
         }
         else
         {
-            filaSeleccionada.children().text(datos[filaSeleccionada.children().attr("class")]);
+            $(this).text(datos[$(this).attr("class")]);
         }
-    }
+    });
 }
 
 //Oculta la tabla de personajes, y muestra el formulario invocando la función pertinente
@@ -591,7 +588,14 @@ function mostrarFormulario()
                     {
                         if(atributo === "id")
                         {
-                            $("#txt" + atributoCapitalizado).val(localStorage.getItem("ID"));
+                            var proximoID = parseInt(localStorage.getItem("ID"));
+
+                            if(isNaN(proximoID))
+                            {
+                                proximoID = 20000;
+                            }
+
+                            $("#txt" + atributoCapitalizado).val(proximoID);
                         }
                         else
                         {
