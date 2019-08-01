@@ -443,7 +443,8 @@ function blanquearFila()
 //una vez devuelto el ok del mismo.
 function borrarFilaSeleccionada(tabla)
 {
-    tabla.remove($("#filaSeleccionada"));
+    //tabla.remove($("#filaSeleccionada"));
+    $("#filaSeleccionada").remove();
 }
 
 //Modifica los datos de la fila seleccionada con los datos de la personaje pasada por parámetro.
