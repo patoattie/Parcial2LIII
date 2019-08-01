@@ -41,7 +41,7 @@ function traerPersonajes()
     }
 
     crearTabla();
-    crearFormulario();
+    //crearFormulario();
 
     $("#btnGetPersonajes").css("pointer-events", "auto");
     $("#btnAltaPersonaje").css("pointer-events", "auto");
@@ -209,19 +209,12 @@ function personajeToString(personaje)
 function crearTabla()
 {
     var puedeCrearDetalle = true; //Si no tengo elementos desde el servidor cambia a false.
-    var div = $("#info");
-    //var tablaPersonajes = div.append("<table>");
 
-    div.append("<table>");
-    var tablaPersonajes = $("#info").children("table");
-
-    tablaPersonajes.attr("id", "tablaPersonajes");
-    $("#tablaPersonajes").attr({"border": "1px", "class": "tablaPersonajes"});
+    $("#info").append("<table>");
+    $("#info table").attr("id", "tablaPersonajes");
+    $("#tablaPersonajes").attr("border", "1px");
+    $("#tablaPersonajes").attr("class", "tablaPersonajes");
     $("#tablaPersonajes").css("border-collapse", "collapse");
-    //tablaPersonajes.attr("border", "1px");
-    //tablaPersonajes.css("border-collapse", "collapse");
-    //$("#info table").attr("id", "tablaPersonajes");
-    //tablaPersonajes.attr("class", "tablaPersonajes");
 
     if(typeof personajes[0] != "object") //Si el servidor no trae nada creo la estructura vacía.
     {
@@ -242,64 +235,56 @@ function crearTabla()
 //y en la modificación no se altera su valor.
 function crearFormulario()
 {
-    var div = $("#info");
+    $("#info").append("<form>");
+    $("#info form").attr("id", "formularioPersonajes");
+    $("#formularioPersonajes").attr("action", "#");
+    $("#formularioPersonajes").css("display", "none");
 
-    div.append("<form id=formularioPersonajes>");
-    var formulario = $("#formularioPersonajes")
-    formulario.attr("action", "#");
-    formulario.css("display", "none");
+    $("#formularioPersonajes").append("<fieldset>");
+    $("#formularioPersonajes fieldset").append("<legend>Personaje");
 
-    formulario.append("<fieldset id=grupo>");
-    var grupo = $("#grupo");
-    
-    grupo.append("<legend id=leyenda>");
-    var leyenda = $("#leyenda");
-    leyenda.text("Personaje");
+    $("#formularioPersonajes fieldset").append("<input>");
+    $("#formularioPersonajes fieldset").append("<input>");
+    $("#formularioPersonajes fieldset").append("<input>");
+    $("#formularioPersonajes fieldset").append("<input>");
 
     for(var atributo in personajes[0])
     {
         switch(atributo)
         {
             case "casa":
-                grupo.append("<fieldset id=grupoCasa>");
-                var grupoCasa = $("#grupoCasa");
-                grupoCasa.append("<legend id=leyendaCasa>");
-                var leyendaCasa = $("#leyendaCasa");
-
-                grupoCasa.attr("class", "grupoInterno");
-                leyendaCasa.text("Casa");
+                $("#formularioPersonajes fieldset").append("<fieldset>");
+                $("#formularioPersonajes fieldset fieldset").append("<legend>Casa");
+                $("#formularioPersonajes fieldset fieldset").attr("class", "grupoInterno");
 
                 for(var i = 0; i < casas.length; i++)
                 {
-                    grupoCasa.append("<input id=opt" + casas[i] + ">");
-                    var optButton = $("#opt" + casas[i]);
-                    grupoCasa.append("<label id=etiqueta" + casas[i] + ">");
-                    var etiquetaCasa = $("#etiqueta" + casas[i]);
+                    var etiquetaCasa = grupoCasa.append("label");
+                    var optButton = grupoCasa.append("input");
 
                     etiquetaCasa.attr("for", "opt" + casas[i]);
                     etiquetaCasa.text(casas[i]);
 
                     optButton.attr("type", "radio");
+                    optButton.attr("id", "opt" + casas[i]);
                     optButton.attr("name", "casa");
                     optButton.attr("value", casas[i]);
                     optButton.text(" " + casas[i]);
 
-                    grupoCasa.append("<br>");
+                    grupoCasa.append("br");
                 }
 
                 break;
 
             case "traidor":
-                grupo.append("<fieldset id=grupoTraidor>");
-                var grupoTraidor = $("#grupoTraidor");
-                grupoTraidor.append("<input id=chkTraidor>");
-                var chkTraidor = $("#chkTraidor");
-                grupoTraidor.append("<label id=etiquetaTraidor>");
-                var etiquetaTraidor = $("#etiquetaTraidor");
+                var grupoTraidor = grupo.append("fieldset");
+                var chkTraidor = grupoTraidor.append("input");
+                var etiquetaTraidor = grupoTraidor.append("label");
 
                 grupoTraidor.attr("class", "grupoInterno");
 
                 chkTraidor.attr("type", "checkbox");
+                chkTraidor.attr("id", "chkTraidor");
                 chkTraidor.attr("name", "traidor");
                 chkTraidor.attr("value", "traidor");
                 chkTraidor.text("Es Traidor");
@@ -310,16 +295,15 @@ function crearFormulario()
                 break;
 
             default:
+                var cuadroTexto = grupo.append("input");
+                var etiqueta = grupo.append("label");
                 var atributoCapitalizado = atributo.charAt(0).toUpperCase() + atributo.slice(1).toLowerCase(); //Primer letra en mayuscula, resto minuscula
-                grupo.append("<label id=etiqueta" + atributo + ">");
-                var etiqueta = $("#etiqueta" + atributo);
-                grupo.append("<input id=txt" + atributoCapitalizado + ">");
-                var cuadroTexto = $("#txt" + atributoCapitalizado);
         
                 etiqueta.attr("for", "txt" + atributoCapitalizado);
                 etiqueta.text(atributoCapitalizado + ": ");
                         
                 cuadroTexto.attr("type", "text");
+                cuadroTexto.attr("id", "txt" + atributoCapitalizado);
 
                 if(atributo === "id")
                 {
@@ -330,78 +314,66 @@ function crearFormulario()
         }
     }
 
-    grupo.append("<input id=btnAgregar>");
-    var btnAgregar = $("#btnAgregar");
-    grupo.append("<input id=btnModificar>");
-    var btnModificar = $("#btnModificar");
-    grupo.append("<input id=btnBorrar>");
-    var btnBorrar = $("#btnBorrar");
-    grupo.append("<input id=btnCancelar>");
-    var btnCancelar = $("#btnCancelar");
+    botonAgregar.attr("type", "button");
+    botonAgregar.attr("id", "btnAgregar");
+    botonAgregar.val("Agregar");
+    botonAgregar.on("click", opcionAgregarPersonaje);
 
-    btnAgregar.attr("type", "button");
-    btnAgregar.val("Agregar");
-    btnAgregar.on("click", opcionAgregarPersonaje);
+    botonModificar.attr("type", "button");
+    botonModificar.attr("id", "btnModificar");
+    botonModificar.val("Modificar");
+    botonModificar.on("click", opcionModificarPersonaje);
 
-    btnModificar.attr("type", "button");
-    btnModificar.val("Modificar");
-    btnModificar.on("click", opcionModificarPersonaje);
+    botonBorrar.attr("type", "button");
+    botonBorrar.attr("id", "btnBorrar");
+    botonBorrar.val("Borrar");
+    botonBorrar.on("click", opcionBorrarPersonaje);
 
-    btnBorrar.attr("type", "button");
-    btnBorrar.val("Borrar");
-    btnBorrar.on("click", opcionBorrarPersonaje);
-
-    btnCancelar.attr("type", "button");
-    btnCancelar.val("Cancelar");
-    btnCancelar.on("click", ocultarFormulario);
+    botonCancelar.attr("type", "button");
+    botonCancelar.attr("id", "btnCancelar");
+    botonCancelar.val("Cancelar");
+    botonCancelar.on("click", ocultarFormulario);
 }
 
 //Crea la fila de cabecera, con tantas columnas como atributos posea la personaje, en la tabla de personajes.
 function crearCabecera(tablaPersonajes)
 {
-    tablaPersonajes.append("<tr id=filaCabecera>");
-    var fila = $("#filaCabecera");
+    tablaPersonajes.append("<tr>");
 
     for(var atributo in personajes[0])
     {
-        fila.append("<th>" + atributo);
+        $("tr").append("<th>" + atributo);
     }
 }
 
 //Crea tantas fila de detalle en la tabla de personajes como personajes haya cargadas.
 function crearDetalle(tablaPersonajes, datos)
 {
-    var filaDetalle;
     for(var i = 0; i < datos.length; i++)
     {
-        tablaPersonajes.append("<tr id=filaDetalle" + i + ">");
-        filaDetalle = $("#filaDetalle" + i);
-        var columna;
-        filaDetalle.on("click", seleccionarFila);
+        tablaPersonajes.append("<tr>");
+        $("tr").on("click", seleccionarFila);
 
         for(atributo in datos[i])
         {
-            //filaDetalle.append("<td>");
-            //columna = filaDetalle.children("td");
+            //columna = filaDetalle.append("td");
             //columna.attr("class", atributo);
 
             if(atributo == "traidor")
             {
                 if(datos[i][atributo])
                 {
-                    filaDetalle.append("<td id=ColumnaDetalle" + atributo + i + ">Si");
+                    $("tr").append("<td>Si");
                 }
                 else
                 {
-                    filaDetalle.append("<td id=ColumnaDetalle" + atributo + i + ">No");
+                    $("tr").append("<td>No");
                 }
             }
             else
             {
-                filaDetalle.append("<td id=ColumnaDetalle" + atributo + i + ">" + datos[i][atributo]);
+                $("tr").append("<td>" + datos[i][atributo]);
             }
-            //columna = filaDetalle.children("td");
-            $("#ColumnaDetalle" + atributo + i).attr("class", atributo);
         }
     }
 }
