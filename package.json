@@ -1,0 +1,24 @@
+{
+  "name": "parcial2l",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "@types/jquery": "^3.3.30",
+    "npm": "^6.10.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patoattie/Parcial2LIII.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patoattie/Parcial2LIII/issues"
+  },
+  "homepage": "https://github.com/patoattie/Parcial2LIII#readme"
+}

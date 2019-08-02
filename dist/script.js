@@ -21,8 +21,9 @@ function activarMenu(elemento)
     elemento.attr("class", "active");
 }
 
-function cargarArrayPersonajes(personajes)
+function cargarArrayPersonajes()
 {
+    var personajes = [];
     var storage = JSON.parse(localStorage.getItem("personajes"));
 
     if(storage == null || storage[0] == undefined) //Si el servidor no trae nada creo la estructura vacía.
@@ -43,8 +44,7 @@ function traerPersonajes()
     activarMenu($("#btnGetPersonajes"));
     $("#info").html("");
 
-    var personajes = [];
-    personajes = cargarArrayPersonajes(personajes);
+    var personajes = cargarArrayPersonajes();
 
     crearTabla(personajes);
     crearFormulario(personajes);
@@ -56,8 +56,7 @@ function traerPersonajes()
 //Llamador usado por el evento dla opción de Agregar del formulario
 function opcionAgregarPersonaje()
 {
-    var personajes = [];
-    personajes = cargarArrayPersonajes(personajes);
+    var personajes = cargarArrayPersonajes();
 
     agregarPersonaje(personajes, personajeEditado(personajes));
 }
@@ -122,8 +121,7 @@ function agregarPersonaje(personajes, personaje)
 //Llamador usado por el evento dla opción de Borrar del formulario
 function opcionBorrarPersonaje()
 {
-    var personajes = [];
-    personajes = cargarArrayPersonajes(personajes);
+    var personajes = cargarArrayPersonajes();
 
     borrarPersonaje(personajes, personajeSeleccionado);
 }
@@ -153,8 +151,7 @@ function borrarPersonaje(personajes, personaje)
 //Llamador usado por el evento dla opción de Modificar del formulario
 function opcionModificarPersonaje()
 {
-    var personajes = [];
-    personajes = cargarArrayPersonajes(personajes);
+    var personajes = cargarArrayPersonajes();
 
     modificarPersonaje(personajes, personajeSeleccionado, personajeEditado(personajes));
 }
@@ -444,13 +441,7 @@ function seleccionarFila()
 //Quita el atributo id de la fila seleccionada.
 function blanquearFila()
 {
-    //var filaSeleccionada = $("#filaSeleccionada");
-
-    //if(filaSeleccionada) //Si hay una fila seleccionada, le quito el id
-    //{
-        //filaSeleccionada.removeAttr("id");
-        $("#filaSeleccionada").removeAttr("id");
-    //}
+    $("#filaSeleccionada").removeAttr("id");
 }
 
 //Modifica los datos de la fila seleccionada con los datos de la personaje pasada por parámetro.
@@ -486,8 +477,7 @@ function modificarFilaSeleccionada(datos)
 //sin parámetro. Lo invoca la opción de Alta del menú
 function altaPersonaje()
 {
-    var personajes = [];
-    personajes = cargarArrayPersonajes(personajes);
+    var personajes = cargarArrayPersonajes();
 
     activarMenu($("#btnAltaPersonaje"));
 
@@ -504,8 +494,7 @@ function altaPersonaje()
 //pasándole por parámetro la personaje que se quiere editar. Lo invoca la opción de Editar del menú
 function editarPersonaje()
 {
-    var personajes = [];
-    personajes = cargarArrayPersonajes(personajes);
+    var personajes = cargarArrayPersonajes();
 
     activarMenu($("#btnEditarPersonaje"));
 
