@@ -1,6 +1,5 @@
 $("document").ready(asignarManejadores);
 
-var personajes = [];
 var personajeSeleccionado = {};
 var casas = ["Stark", "Targaryen", "Lannister"];
 
@@ -22,26 +21,33 @@ function activarMenu(elemento)
     elemento.attr("class", "active");
 }
 
-//Llama a la función traerPersonajes del servidor, luego con los datos devueltos se crean en el DOM la tabla y el formulario de edición.
-function traerPersonajes()
+function cargarArrayPersonajes(personajes)
 {
-    activarMenu($("#btnGetPersonajes"));
     var storage = JSON.parse(localStorage.getItem("personajes"));
-    $("#info").html("");
 
-    personajes = [];
-
-    if(storage == null)
+    if(storage == null || storage[0] == undefined) //Si el servidor no trae nada creo la estructura vacía.
     {
-        personajes.push("");
+        personajes[0] = {"id":null,"nombre":null,"apellido":null,"edad":null,"casa":null,"traidor":null};
     }
     else
     {
         personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
     }
 
-    crearTabla();
-    crearFormulario();
+    return personajes;
+}
+
+//Llama a la función traerPersonajes del servidor, luego con los datos devueltos se crean en el DOM la tabla y el formulario de edición.
+function traerPersonajes()
+{
+    activarMenu($("#btnGetPersonajes"));
+    $("#info").html("");
+
+    var personajes = [];
+    personajes = cargarArrayPersonajes(personajes);
+
+    crearTabla(personajes);
+    crearFormulario(personajes);
 
     $("#btnGetPersonajes").css("pointer-events", "auto");
     $("#btnAltaPersonaje").css("pointer-events", "auto");
@@ -50,11 +56,14 @@ function traerPersonajes()
 //Llamador usado por el evento dla opción de Agregar del formulario
 function opcionAgregarPersonaje()
 {
-    agregarPersonaje(personajeEditado());
+    var personajes = [];
+    personajes = cargarArrayPersonajes(personajes);
+
+    agregarPersonaje(personajes, personajeEditado(personajes));
 }
 
 //Crea un objeto JSON a partir de los datos del formulario
-function personajeEditado()
+function personajeEditado(personajes)
 {
     var personaje = {};
 
@@ -79,7 +88,7 @@ function personajeEditado()
 }
 
 //Llama a la función altaPersonaje del servidor, pasándole el objeto que se quiere agregar por parámetro.
-function agregarPersonaje(personaje)
+function agregarPersonaje(personajes, personaje)
 {
     var nuevoPersonaje = [];
     var proximoID = parseInt(localStorage.getItem("ID"));
@@ -113,11 +122,14 @@ function agregarPersonaje(personaje)
 //Llamador usado por el evento dla opción de Borrar del formulario
 function opcionBorrarPersonaje()
 {
-    borrarPersonaje(personajeSeleccionado);
+    var personajes = [];
+    personajes = cargarArrayPersonajes(personajes);
+
+    borrarPersonaje(personajes, personajeSeleccionado);
 }
 
 //Llama a la función bajaPersonaje del servidor, pasándole el objeto que se quiere eliminar por parámetro.
-function borrarPersonaje(personaje)
+function borrarPersonaje(personajes, personaje)
 {
     var index = personajes.findIndex((per) => 
     {
@@ -141,11 +153,14 @@ function borrarPersonaje(personaje)
 //Llamador usado por el evento dla opción de Modificar del formulario
 function opcionModificarPersonaje()
 {
-    modificarPersonaje(personajeSeleccionado, personajeEditado());
+    var personajes = [];
+    personajes = cargarArrayPersonajes(personajes);
+
+    modificarPersonaje(personajes, personajeSeleccionado, personajeEditado(personajes));
 }
 
 //Llama a la función modificarPersonaje del servidor, pasándole el objeto que se quiere modificar por parámetro.
-function modificarPersonaje(personaPre, personaPost)
+function modificarPersonaje(personajes, personaPre, personaPost)
 {
     var index = personajes.findIndex((per) => 
     {
@@ -201,7 +216,7 @@ function personajeToString(personaje)
 }
 
 //Crea la tabla de personajes en el div info
-function crearTabla()
+function crearTabla(personajes)
 {
     var puedeCrearDetalle = true; //Si no tengo elementos desde el servidor cambia a false.
     var div = $("#info");
@@ -218,24 +233,23 @@ function crearTabla()
     //$("#info table").attr("id", "tablaPersonajes");
     //tablaPersonajes.attr("class", "tablaPersonajes");
 
-    if(typeof personajes[0] != "object") //Si el servidor no trae nada creo la estructura vacía.
+    if(personajes.id == null) //Si el servidor no trae nada creo la estructura vacía.
     {
-        personajes[0] = {"id":null,"nombre":null,"apellido":null,"edad":null,"casa":null,"traidor":null};
         puedeCrearDetalle = false;
     }
 
-    crearCabecera($("#tablaPersonajes"));
+    crearCabecera(personajes, $("#tablaPersonajes"));
 
     if(puedeCrearDetalle)
     {
-        crearDetalle(tablaPersonajes, personajes);
+        crearDetalle(personajes, tablaPersonajes, personajes);
     }
 }
 
 //Crea el formulario de edición de personajes en el div info.
 //El atributo id lo crea como solo lectura, ya que el servidor en el alta lo deduce,
 //y en la modificación no se altera su valor.
-function crearFormulario()
+function crearFormulario(personajes)
 {
     var div = $("#info");
 
@@ -352,7 +366,7 @@ function crearFormulario()
 }
 
 //Crea la fila de cabecera, con tantas columnas como atributos posea la personaje, en la tabla de personajes.
-function crearCabecera(tablaPersonajes)
+function crearCabecera(personajes, tablaPersonajes)
 {
     tablaPersonajes.append("<tr id=filaCabecera>");
     var fila = $("#filaCabecera");
@@ -472,6 +486,9 @@ function modificarFilaSeleccionada(datos)
 //sin parámetro. Lo invoca la opción de Alta del menú
 function altaPersonaje()
 {
+    var personajes = [];
+    personajes = cargarArrayPersonajes(personajes);
+
     activarMenu($("#btnAltaPersonaje"));
 
     $("#btnAltaPersonaje").css("pointer-events", "none");
@@ -480,13 +497,16 @@ function altaPersonaje()
     $("#tablaPersonajes").css("display","none");
     $("#formularioPersonajes").css("display","initial");
 
-    mostrarFormulario();
+    mostrarFormulario(personajes);
 }
 
 //Oculta la tabla de personajes, y muestra el formulario invocando la función pertinente
 //pasándole por parámetro la personaje que se quiere editar. Lo invoca la opción de Editar del menú
 function editarPersonaje()
 {
+    var personajes = [];
+    personajes = cargarArrayPersonajes(personajes);
+
     activarMenu($("#btnEditarPersonaje"));
 
     $("#btnAltaPersonaje").css("pointer-events", "none");
@@ -495,7 +515,7 @@ function editarPersonaje()
     $("#tablaPersonajes").css("display","none");
     $("#formularioPersonajes").css("display","initial");
 
-    mostrarFormulario(personajeSeleccionado);
+    mostrarFormulario(personajes, personajeSeleccionado);
 }
 
 //Arma el formulario de edición de personajes.
@@ -505,13 +525,13 @@ function editarPersonaje()
 //Si se invoca con un objeto, la función asume modificación o baja de la personaje que viene
 //por parámetro, mostrando los botones que invocan las funciones respectivas en el servidor,
 //y completa los cuadros de texto con los valores de cada atributo.
-function mostrarFormulario()
+function mostrarFormulario(personajes)
 {
     var datos;
 
-    if(typeof arguments[0] == "object") //Es de tipo object si vino un argumento en los parámetros formales de la función.
+    if(typeof arguments[1] == "object") //Es de tipo object si vino un argumento en los parámetros formales de la función.
     {
-        datos = arguments[0];
+        datos = arguments[1];
 
         $("#btnAgregar").css("display","none");
         $("#btnModificar").css("display","initial");

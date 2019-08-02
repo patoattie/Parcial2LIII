@@ -1,4 +1,1 @@
-class App
-{
-    //console.log('HOLA');
-}
+//window.onload
