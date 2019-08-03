@@ -17,7 +17,7 @@ class Personaje
         this.esTraidor = esTraidor;
     }
 
-    private static getProximoId():number
+    public static getProximoId():number
     {
         let proximoID:number = Number(localStorage.getItem("ID"));
 
@@ -75,6 +75,38 @@ class Personaje
         }
 
         return retorno;
+    }
+
+    public getDinamico(atributo:string):any
+    {
+        let valor:any;
+
+        switch(atributo)
+        {
+            case "id":
+                valor = this.getId();
+                break;
+            case "nombre":
+                valor = this.getNombre();
+                break;
+            case "apellido":
+                valor = this.getApellido();
+                break;
+            case "edad":
+                valor = this.getEdad();
+                break;
+            case "casa":
+                valor = this.getCasa();
+                break;
+            case "esTraidor":
+                valor = this.getEsTraidor();
+                break;
+            default:
+                valor = null;
+                break;
+        }
+
+        return valor;
     }
 
     public toString():string

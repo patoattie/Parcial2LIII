@@ -43,6 +43,33 @@ var Personaje = (function () {
         }
         return retorno;
     };
+    Personaje.prototype.getDinamico = function (atributo) {
+        var valor;
+        switch (atributo) {
+            case "id":
+                valor = this.getId();
+                break;
+            case "nombre":
+                valor = this.getNombre();
+                break;
+            case "apellido":
+                valor = this.getApellido();
+                break;
+            case "edad":
+                valor = this.getEdad();
+                break;
+            case "casa":
+                valor = this.getCasa();
+                break;
+            case "esTraidor":
+                valor = this.getEsTraidor();
+                break;
+            default:
+                valor = null;
+                break;
+        }
+        return valor;
+    };
     Personaje.prototype.toString = function () {
         var texto = "";
         texto += "ID: " + this.getId() + "\n";
