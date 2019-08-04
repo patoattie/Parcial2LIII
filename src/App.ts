@@ -602,7 +602,7 @@ class App
     }
 
     //Crea un objeto JSON a partir de los datos del formulario
-    public static personajeEditado(personajes:Personaje[])
+    public static personajeEditado(personajes:Personaje[]):Personaje
     {
         let personaje:Personaje = new Personaje();
 
@@ -611,14 +611,15 @@ class App
             switch(atributo)
             {
                 case "casa":
-                    personaje["casa"] = $("input[name=casa]:checked", '#grupoCasa').val();
+                    let valor:string = String($('input[name="casa"]:checked').val());
+                    personaje.setCasaStr(valor);
                     break;
                 case "traidor":
-                    personaje["traidor"] = $("#chkTraidor").prop("checked");
+                    personaje.setEsTraidor($("#chkTraidor").prop("checked"));
                     break;
                 default:
                     let atributoCapitalizado:string = atributo.charAt(0).toUpperCase() + atributo.slice(1).toLowerCase(); //Primer letra en mayuscula, resto minuscula
-                    personaje[atributo] = $("#txt" + atributoCapitalizado).val();
+                    personaje.setDinamico(atributo, $("#txt" + atributoCapitalizado).val());
                     break;
             }
         }

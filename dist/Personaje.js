@@ -36,8 +36,14 @@ var Personaje = (function () {
     Personaje.prototype.getCasa = function () {
         return this.casa;
     };
+    Personaje.prototype.getCasaStr = function () {
+        return this.casa;
+    };
     Personaje.prototype.setCasa = function (casa) {
         this.casa = casa;
+    };
+    Personaje.prototype.setCasaStr = function (casa) {
+        this.setCasa(ECasa[casa]);
     };
     Personaje.prototype.getEsTraidor = function () {
         return this.esTraidor;

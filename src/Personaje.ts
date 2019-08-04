@@ -76,9 +76,19 @@ class Personaje
         return this.casa;
     }
 
+    public getCasaStr():string
+    {
+        return this.casa;
+    }
+
     public setCasa(casa:ECasa):void
     {
         this.casa = casa;
+    }
+
+    public setCasaStr(casa:string):void
+    {
+        this.setCasa(ECasa[casa]);
     }
 
     public getEsTraidor():boolean

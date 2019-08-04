@@ -359,14 +359,15 @@ var App = (function () {
         for (var atributo in personajes[0]) {
             switch (atributo) {
                 case "casa":
-                    personaje["casa"] = jquery_1.default("input[name=casa]:checked", '#grupoCasa').val();
+                    var valor = String(jquery_1.default('input[name="casa"]:checked').val());
+                    personaje.setCasaStr(valor);
                     break;
                 case "traidor":
-                    personaje["traidor"] = jquery_1.default("#chkTraidor").prop("checked");
+                    personaje.setEsTraidor(jquery_1.default("#chkTraidor").prop("checked"));
                     break;
                 default:
                     var atributoCapitalizado = atributo.charAt(0).toUpperCase() + atributo.slice(1).toLowerCase();
-                    personaje[atributo] = jquery_1.default("#txt" + atributoCapitalizado).val();
+                    personaje.setDinamico(atributo, jquery_1.default("#txt" + atributoCapitalizado).val());
                     break;
             }
         }
