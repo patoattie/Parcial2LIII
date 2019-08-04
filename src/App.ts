@@ -511,9 +511,19 @@ class App
     //Llama a la función bajaPersonaje del servidor, pasándole el objeto que se quiere eliminar por parámetro.
     public static borrarPersonaje(personajes:Personaje[], personaje:Personaje):void
     {
-        let index:number = personajes.findIndex((per) => 
+        /*let index:number = personajes.findIndex((per) => 
         {
             return per.id == personaje.getId();
+        });*/
+
+        let index:number = -1;
+
+        personajes.forEach(unPersonaje =>
+        {
+            if(unPersonaje.getId() == personaje.getId())
+            {
+                index = unPersonaje.getId();
+            }
         });
     
         if (index != -1)
@@ -533,11 +543,21 @@ class App
     //Llama a la función modificarPersonaje del servidor, pasándole el objeto que se quiere modificar por parámetro.
     public static modificarPersonaje(personajes:Personaje[], personaPre:Personaje, personaPost:Personaje):void
     {
-        let index:number = personajes.findIndex((per) => 
+        /*let index:number = personajes.findIndex((per) => 
         {
             return per.id == personaPost.getId();
-        });
+        });*/
     
+        let index:number = -1;
+
+        personajes.forEach(unPersonaje =>
+        {
+            if(unPersonaje.getId() == personaPost.getId())
+            {
+                index = unPersonaje.getId();
+            }
+        });
+
         if (index != -1)
         {
             personajes.splice(index, 1);

@@ -308,8 +308,11 @@ var App = (function () {
         localStorage.setItem("ID", proximoID.toString());
     };
     App.borrarPersonaje = function (personajes, personaje) {
-        var index = personajes.findIndex(function (per) {
-            return per.id == personaje.getId();
+        var index = -1;
+        personajes.forEach(function (unPersonaje) {
+            if (unPersonaje.getId() == personaje.getId()) {
+                index = unPersonaje.getId();
+            }
         });
         if (index != -1) {
             personajes.splice(index, 1);
@@ -320,8 +323,11 @@ var App = (function () {
         localStorage.setItem("personajes", JSON.stringify(personajes));
     };
     App.modificarPersonaje = function (personajes, personaPre, personaPost) {
-        var index = personajes.findIndex(function (per) {
-            return per.id == personaPost.getId();
+        var index = -1;
+        personajes.forEach(function (unPersonaje) {
+            if (unPersonaje.getId() == personaPost.getId()) {
+                index = unPersonaje.getId();
+            }
         });
         if (index != -1) {
             personajes.splice(index, 1);
