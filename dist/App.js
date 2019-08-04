@@ -28,15 +28,12 @@ var App = (function () {
         elemento.attr("class", "active");
     };
     App.cargarArrayPersonajes = function () {
-        var personajes = [];
-        var storage = JSON.parse(localStorage.getItem("personajes"));
-        if (storage == null || storage[0] == undefined) {
-            personajes[0] = { "id": null, "nombre": null, "apellido": null, "edad": null, "casa": null, "esTraidor": null };
-        }
-        else {
-            personajes = storage;
-        }
+        var personajes = JSON.parse(localStorage.getItem("personajes"));
         return personajes;
+    };
+    App.cargarPersonajeSeleccionado = function () {
+        var personajeSeleccionado = JSON.parse(localStorage.getItem("personajeSeleccionado"));
+        return personajeSeleccionado;
     };
     App.altaPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
@@ -54,7 +51,7 @@ var App = (function () {
         jquery_1.default("#btnEditarPersonaje").css("pointer-events", "none");
         jquery_1.default("#tablaPersonajes").css("display", "none");
         jquery_1.default("#formularioPersonajes").css("display", "initial");
-        App.mostrarFormulario(personajes, personajeSeleccionado);
+        App.mostrarFormulario(personajes, App.cargarPersonajeSeleccionado());
     };
     App.crearTabla = function (personajes) {
         var puedeCrearDetalle = true;
@@ -243,7 +240,7 @@ var App = (function () {
         for (var i = 0; i < datos.length; i++) {
             tablaPersonajes.append("<tr id=filaDetalle" + i + ">");
             filaDetalle = jquery_1.default("#filaDetalle" + i);
-            filaDetalle.on("click", seleccionarFila);
+            filaDetalle.on("click", App.seleccionarFila);
             for (var atributo in datos[i]) {
                 if (atributo == "traidor") {
                     if (datos[i][atributo]) {
@@ -265,6 +262,7 @@ var App = (function () {
     };
     App.seleccionarFila = function () {
         var filaActual = jquery_1.default(this);
+        var personajeSeleccionado = App.cargarPersonajeSeleccionado();
         jquery_1.default("#btnEditarPersonaje").css("pointer-events", "auto");
         App.blanquearFila();
         filaActual.attr("id", "filaSeleccionada");
@@ -283,11 +281,11 @@ var App = (function () {
     };
     App.opcionBorrarPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
-        App.borrarPersonaje(personajes, personajeSeleccionado);
+        App.borrarPersonaje(personajes, App.cargarPersonajeSeleccionado());
     };
     App.opcionModificarPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
-        App.modificarPersonaje(personajes, personajeSeleccionado, App.personajeEditado(personajes));
+        App.modificarPersonaje(personajes, App.cargarPersonajeSeleccionado(), App.personajeEditado(personajes));
     };
     App.agregarPersonaje = function (personajes, personaje) {
         var nuevoPersonaje = [];
@@ -315,7 +313,7 @@ var App = (function () {
         });
         if (index != -1) {
             personajes.splice(index, 1);
-            alert("Personaje:\n\n" + personajeToString(personaje) + "\n\nfue borrada de la tabla");
+            alert("Personaje:\n\n" + personaje.toString() + "\n\nfue borrada de la tabla");
             jquery_1.default("#filaSeleccionada").remove();
         }
         App.ocultarFormulario();
@@ -323,12 +321,12 @@ var App = (function () {
     };
     App.modificarPersonaje = function (personajes, personaPre, personaPost) {
         var index = personajes.findIndex(function (per) {
-            return per.id == personaPost.id;
+            return per.id == personaPost.getId();
         });
         if (index != -1) {
             personajes.splice(index, 1);
             personajes.push(personaPost);
-            alert("Personaje:\n\n" + personajeToString(personaPre) + "\n\nfue modificada a:\n\n" + personajeToString(personaPost));
+            alert("Personaje:\n\n" + personaPre.toString() + "\n\nfue modificada a:\n\n" + personaPost.toString());
             App.modificarFilaSeleccionada(personaPost);
         }
         App.ocultarFormulario();
@@ -351,7 +349,7 @@ var App = (function () {
         });
     };
     App.personajeEditado = function (personajes) {
-        var personaje = {};
+        var personaje = new Personaje();
         for (var atributo in personajes[0]) {
             switch (atributo) {
                 case "casa":

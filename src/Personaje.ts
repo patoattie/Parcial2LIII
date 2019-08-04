@@ -7,7 +7,7 @@ class Personaje
     private casa:ECasa;
     private esTraidor:boolean;
 
-    constructor(nombre:string, apellido:string, edad:number, casa:ECasa, esTraidor:boolean)
+    /*constructor(nombre:string, apellido:string, edad:number, casa:ECasa, esTraidor:boolean)
     {
         this.id = Personaje.getProximoId();
         this.nombre = nombre;
@@ -15,7 +15,7 @@ class Personaje
         this.edad = edad;
         this.casa = casa;
         this.esTraidor = esTraidor;
-    }
+    }*/
 
     public static getProximoId():number
     {

@@ -39,19 +39,40 @@ class App
 
     public static cargarArrayPersonajes():Personaje[]
     {
-        let personajes:Personaje[] = [];
+        /*let personajes:Personaje[] = [];
         let storage:Personaje[] = JSON.parse(localStorage.getItem("personajes"));
     
         if(storage == null || storage[0] == undefined) //Si el servidor no trae nada creo la estructura vacía.
         {
-            personajes[0] = {"id":null,"nombre":null,"apellido":null,"edad":null,"casa":null,"esTraidor":null};
+            personajes[0] = new Personaje; //{"id":null,"nombre":null,"apellido":null,"edad":null,"casa":null,"esTraidor":null};
         }
         else
         {
             personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
-        }
+        }*/
+
+        let personajes:Personaje[] = JSON.parse(localStorage.getItem("personajes"));
     
         return personajes;
+    }
+
+    public static cargarPersonajeSeleccionado():Personaje
+    {
+        /*let personajes:Personaje[] = [];
+        let storage:Personaje[] = JSON.parse(localStorage.getItem("personajes"));
+    
+        if(storage == null || storage[0] == undefined) //Si el servidor no trae nada creo la estructura vacía.
+        {
+            personajes[0] = new Personaje; //{"id":null,"nombre":null,"apellido":null,"edad":null,"casa":null,"esTraidor":null};
+        }
+        else
+        {
+            personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
+        }*/
+
+        let personajeSeleccionado:Personaje = JSON.parse(localStorage.getItem("personajeSeleccionado"));
+    
+        return personajeSeleccionado;
     }
 
     //Oculta la tabla de personajes, y muestra el formulario invocando la función pertinente
@@ -85,7 +106,7 @@ class App
         $("#tablaPersonajes").css("display","none");
         $("#formularioPersonajes").css("display","initial");
 
-        App.mostrarFormulario(personajes, personajeSeleccionado);
+        App.mostrarFormulario(personajes, App.cargarPersonajeSeleccionado());
     }
 
     //Crea la tabla de personajes en el div info
@@ -369,7 +390,7 @@ class App
             tablaPersonajes.append("<tr id=filaDetalle" + i + ">");
             filaDetalle = $("#filaDetalle" + i);
             //let columna;
-            filaDetalle.on("click", seleccionarFila);
+            filaDetalle.on("click", App.seleccionarFila);
 
             for(let atributo in datos[i])
             {
@@ -410,6 +431,7 @@ class App
     public static seleccionarFila():void
     {
         let filaActual:JQuery<App> = $(this);
+        let personajeSeleccionado = App.cargarPersonajeSeleccionado();
         //$("#btnEditarPersonaje").removeAttr("disabled");
         $("#btnEditarPersonaje").css("pointer-events", "auto");
         App.blanquearFila();
@@ -443,7 +465,7 @@ class App
     {
         let personajes:Personaje[] = App.cargarArrayPersonajes();
 
-        App.borrarPersonaje(personajes, personajeSeleccionado);
+        App.borrarPersonaje(personajes, App.cargarPersonajeSeleccionado());
     }
 
     //Llamador usado por el evento dla opción de Modificar del formulario
@@ -451,7 +473,7 @@ class App
     {
         let personajes:Personaje[] = App.cargarArrayPersonajes();
 
-        App.modificarPersonaje(personajes, personajeSeleccionado, App.personajeEditado(personajes));
+        App.modificarPersonaje(personajes, App.cargarPersonajeSeleccionado(), App.personajeEditado(personajes));
     }
 
     //Llama a la función altaPersonaje del servidor, pasándole el objeto que se quiere agregar por parámetro.
@@ -498,7 +520,7 @@ class App
         {
             personajes.splice(index, 1);
 
-            alert("Personaje:\n\n" + personajeToString(personaje) + "\n\nfue borrada de la tabla");
+            alert("Personaje:\n\n" + personaje.toString() + "\n\nfue borrada de la tabla");
 
             $("#filaSeleccionada").remove();
         }
@@ -513,7 +535,7 @@ class App
     {
         let index:number = personajes.findIndex((per) => 
         {
-            return per.id == personaPost.id;
+            return per.id == personaPost.getId();
         });
     
         if (index != -1)
@@ -521,7 +543,7 @@ class App
             personajes.splice(index, 1);
             personajes.push(personaPost);
 
-            alert("Personaje:\n\n" + personajeToString(personaPre) + "\n\nfue modificada a:\n\n" + personajeToString(personaPost));
+            alert("Personaje:\n\n" + personaPre.toString() + "\n\nfue modificada a:\n\n" + personaPost.toString());
             App.modificarFilaSeleccionada(personaPost);
         }
     
@@ -562,7 +584,7 @@ class App
     //Crea un objeto JSON a partir de los datos del formulario
     public static personajeEditado(personajes:Personaje[])
     {
-        let personaje:Personaje = {};
+        let personaje:Personaje = new Personaje();
 
         for(let atributo in personajes[0])
         {
