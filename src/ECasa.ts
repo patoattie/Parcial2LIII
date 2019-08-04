@@ -1,6 +1,6 @@
 enum ECasa
 {
-    stark = "Stark",
-    targaryen = "Targaryen",
-    lannister = "Lannister"
+    Stark = "Stark",
+    Targaryen = "Targaryen",
+    Lannister = "Lannister"
 }

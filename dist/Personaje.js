@@ -87,7 +87,7 @@ var Personaje = (function () {
             case "casa":
                 valor = this.getCasa();
                 break;
-            case "esTraidor":
+            case "traidor":
                 valor = this.getEsTraidor();
                 break;
             default:
@@ -113,7 +113,7 @@ var Personaje = (function () {
             case "casa":
                 this.setCasa(valor);
                 break;
-            case "esTraidor":
+            case "traidor":
                 this.setEsTraidor(valor);
                 break;
         }
@@ -127,6 +127,9 @@ var Personaje = (function () {
         texto += "CASA: " + this.getCasa() + "\n";
         texto += "ES TRAIDOR: " + this.getEsTraidorStr();
         return texto;
+    };
+    Personaje.prototype.getAtributos = function () {
+        return ["id", "nombre", "apellido", "edad", "casa", "traidor"];
     };
     return Personaje;
 }());

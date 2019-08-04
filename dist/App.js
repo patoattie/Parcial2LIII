@@ -1,9 +1,3 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var jquery_1 = __importDefault(require("jquery"));
 window.onload = function () {
     App.asignarManejadores();
 };
@@ -11,27 +5,34 @@ var App = (function () {
     function App() {
     }
     App.asignarManejadores = function () {
-        jquery_1.default("#btnGetPersonajes").on("click", App.traerPersonajes);
-        jquery_1.default("#btnAltaPersonaje").on("click", App.altaPersonaje);
-        jquery_1.default("#btnEditarPersonaje").on("click", App.editarPersonaje);
+        $("#btnGetPersonajes").on("click", App.traerPersonajes);
+        $("#btnAltaPersonaje").on("click", App.altaPersonaje);
+        $("#btnEditarPersonaje").on("click", App.editarPersonaje);
     };
     App.traerPersonajes = function () {
-        App.activarMenu(jquery_1.default("#btnGetPersonajes"));
-        jquery_1.default("#info").html("");
+        App.activarMenu($("#btnGetPersonajes"));
+        $("#info").html("");
         var personajes = App.cargarArrayPersonajes();
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
-        jquery_1.default("#btnGetPersonajes").css("pointer-events", "auto");
-        jquery_1.default("#btnAltaPersonaje").css("pointer-events", "auto");
+        $("#btnGetPersonajes").css("pointer-events", "auto");
+        $("#btnAltaPersonaje").css("pointer-events", "auto");
     };
     App.activarMenu = function (elemento) {
-        if (jquery_1.default(".active")[0]) {
-            jquery_1.default(".active").removeAttr("class");
+        if ($(".active")[0]) {
+            $(".active").removeAttr("class");
         }
         elemento.attr("class", "active");
     };
     App.cargarArrayPersonajes = function () {
-        var personajes = JSON.parse(localStorage.getItem("personajes"));
+        var personajes = [];
+        var storage = JSON.parse(localStorage.getItem("personajes"));
+        if (storage == null || storage[0] == undefined) {
+            personajes[0] = new Personaje();
+        }
+        else {
+            personajes = storage;
+        }
         return personajes;
     };
     App.cargarPersonajeSeleccionado = function () {
@@ -40,64 +41,64 @@ var App = (function () {
     };
     App.altaPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
-        App.activarMenu(jquery_1.default("#btnAltaPersonaje"));
-        jquery_1.default("#btnAltaPersonaje").css("pointer-events", "none");
-        jquery_1.default("#btnEditarPersonaje").css("pointer-events", "none");
-        jquery_1.default("#tablaPersonajes").css("display", "none");
-        jquery_1.default("#formularioPersonajes").css("display", "initial");
+        App.activarMenu($("#btnAltaPersonaje"));
+        $("#btnAltaPersonaje").css("pointer-events", "none");
+        $("#btnEditarPersonaje").css("pointer-events", "none");
+        $("#tablaPersonajes").css("display", "none");
+        $("#formularioPersonajes").css("display", "initial");
         App.mostrarFormulario(personajes);
     };
     App.editarPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
-        App.activarMenu(jquery_1.default("#btnEditarPersonaje"));
-        jquery_1.default("#btnAltaPersonaje").css("pointer-events", "none");
-        jquery_1.default("#btnEditarPersonaje").css("pointer-events", "none");
-        jquery_1.default("#tablaPersonajes").css("display", "none");
-        jquery_1.default("#formularioPersonajes").css("display", "initial");
+        App.activarMenu($("#btnEditarPersonaje"));
+        $("#btnAltaPersonaje").css("pointer-events", "none");
+        $("#btnEditarPersonaje").css("pointer-events", "none");
+        $("#tablaPersonajes").css("display", "none");
+        $("#formularioPersonajes").css("display", "initial");
         App.mostrarFormulario(personajes, App.cargarPersonajeSeleccionado());
     };
     App.crearTabla = function (personajes) {
         var puedeCrearDetalle = true;
-        var div = jquery_1.default("#info");
+        var div = $("#info");
         div.append("<table>");
-        var tablaPersonajes = jquery_1.default("#info").children("table");
+        var tablaPersonajes = $("#info").children("table");
         tablaPersonajes.attr("id", "tablaPersonajes");
-        jquery_1.default("#tablaPersonajes").attr({ "border": "1px", "class": "tablaPersonajes" });
-        jquery_1.default("#tablaPersonajes").css("border-collapse", "collapse");
+        $("#tablaPersonajes").attr({ "border": "1px", "class": "tablaPersonajes" });
+        $("#tablaPersonajes").css("border-collapse", "collapse");
         if (personajes[0].getId() == null) {
             puedeCrearDetalle = false;
         }
-        App.crearCabecera(personajes, jquery_1.default("#tablaPersonajes"));
+        App.crearCabecera(personajes, $("#tablaPersonajes"));
         if (puedeCrearDetalle) {
             App.crearDetalle(tablaPersonajes, personajes);
         }
     };
     App.crearFormulario = function (personajes) {
-        var div = jquery_1.default("#info");
+        var div = $("#info");
         div.append("<form id=formularioPersonajes>");
-        var formulario = jquery_1.default("#formularioPersonajes");
+        var formulario = $("#formularioPersonajes");
         formulario.attr("action", "#");
         formulario.css("display", "none");
         formulario.append("<fieldset id=grupo>");
-        var grupo = jquery_1.default("#grupo");
+        var grupo = $("#grupo");
         grupo.append("<legend id=leyenda>");
-        var leyenda = jquery_1.default("#leyenda");
+        var leyenda = $("#leyenda");
         leyenda.text("Personaje");
-        for (var atributo in personajes[0]) {
-            switch (atributo) {
+        personajes[0].getAtributos().forEach(function (value) {
+            switch (value) {
                 case "casa":
                     grupo.append("<fieldset id=grupoCasa>");
-                    var grupoCasa = jquery_1.default("#grupoCasa");
+                    var grupoCasa = $("#grupoCasa");
                     grupoCasa.append("<legend id=leyendaCasa>");
-                    var leyendaCasa = jquery_1.default("#leyendaCasa");
+                    var leyendaCasa = $("#leyendaCasa");
                     grupoCasa.attr("class", "grupoInterno");
                     leyendaCasa.text("Casa");
                     for (var unaCasa in ECasa) {
                         if (isNaN(Number(unaCasa))) {
                             grupoCasa.append("<input id=opt" + unaCasa + ">");
-                            var optButton = jquery_1.default("#opt" + unaCasa);
+                            var optButton = $("#opt" + unaCasa);
                             grupoCasa.append("<label id=etiqueta" + unaCasa + ">");
-                            var etiquetaCasa = jquery_1.default("#etiqueta" + unaCasa);
+                            var etiquetaCasa = $("#etiqueta" + unaCasa);
                             etiquetaCasa.attr("for", "opt" + unaCasa);
                             etiquetaCasa.text(unaCasa);
                             optButton.attr("type", "radio");
@@ -110,11 +111,11 @@ var App = (function () {
                     break;
                 case "traidor":
                     grupo.append("<fieldset id=grupoTraidor>");
-                    var grupoTraidor = jquery_1.default("#grupoTraidor");
+                    var grupoTraidor = $("#grupoTraidor");
                     grupoTraidor.append("<input id=chkTraidor>");
-                    var chkTraidor = jquery_1.default("#chkTraidor");
+                    var chkTraidor = $("#chkTraidor");
                     grupoTraidor.append("<label id=etiquetaTraidor>");
-                    var etiquetaTraidor = jquery_1.default("#etiquetaTraidor");
+                    var etiquetaTraidor = $("#etiquetaTraidor");
                     grupoTraidor.attr("class", "grupoInterno");
                     chkTraidor.attr("type", "checkbox");
                     chkTraidor.attr("name", "traidor");
@@ -124,28 +125,28 @@ var App = (function () {
                     etiquetaTraidor.text("Es Traidor");
                     break;
                 default:
-                    var atributoCapitalizado = atributo.charAt(0).toUpperCase() + atributo.slice(1).toLowerCase();
-                    grupo.append("<label id=etiqueta" + atributo + ">");
-                    var etiqueta = jquery_1.default("#etiqueta" + atributo);
+                    var atributoCapitalizado = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+                    grupo.append("<label id=etiqueta" + value + ">");
+                    var etiqueta = $("#etiqueta" + value);
                     grupo.append("<input id=txt" + atributoCapitalizado + ">");
-                    var cuadroTexto = jquery_1.default("#txt" + atributoCapitalizado);
+                    var cuadroTexto = $("#txt" + atributoCapitalizado);
                     etiqueta.attr("for", "txt" + atributoCapitalizado);
                     etiqueta.text(atributoCapitalizado + ": ");
                     cuadroTexto.attr("type", "text");
-                    if (atributo === "id") {
+                    if (value === "id") {
                         cuadroTexto.attr("readonly", "");
                     }
                     break;
             }
-        }
+        });
         grupo.append("<input id=btnAgregar>");
-        var btnAgregar = jquery_1.default("#btnAgregar");
+        var btnAgregar = $("#btnAgregar");
         grupo.append("<input id=btnModificar>");
-        var btnModificar = jquery_1.default("#btnModificar");
+        var btnModificar = $("#btnModificar");
         grupo.append("<input id=btnBorrar>");
-        var btnBorrar = jquery_1.default("#btnBorrar");
+        var btnBorrar = $("#btnBorrar");
         grupo.append("<input id=btnCancelar>");
-        var btnCancelar = jquery_1.default("#btnCancelar");
+        var btnCancelar = $("#btnCancelar");
         btnAgregar.attr("type", "button");
         btnAgregar.val("Agregar");
         btnAgregar.on("click", App.opcionAgregarPersonaje);
@@ -161,27 +162,27 @@ var App = (function () {
     };
     App.mostrarFormulario = function (personajes, personajeSeleccionado) {
         if (personajeSeleccionado !== undefined) {
-            jquery_1.default("#btnAgregar").css("display", "none");
-            jquery_1.default("#btnModificar").css("display", "initial");
-            jquery_1.default("#btnBorrar").css("display", "initial");
+            $("#btnAgregar").css("display", "none");
+            $("#btnModificar").css("display", "initial");
+            $("#btnBorrar").css("display", "initial");
         }
         else {
-            jquery_1.default("#btnAgregar").css("display", "initial");
-            jquery_1.default("#btnModificar").css("display", "none");
-            jquery_1.default("#btnBorrar").css("display", "none");
+            $("#btnAgregar").css("display", "initial");
+            $("#btnModificar").css("display", "none");
+            $("#btnBorrar").css("display", "none");
         }
-        for (var atributo in personajes[0]) {
-            var atributoCapitalizado = atributo.charAt(0).toUpperCase() + atributo.slice(1).toLowerCase();
-            switch (atributo) {
+        personajes[0].getAtributos().forEach(function (value) {
+            var atributoCapitalizado = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+            switch (value) {
                 case "casa":
                     if (personajeSeleccionado !== undefined) {
                         for (var unaCasa in ECasa) {
                             if (isNaN(Number(unaCasa))) {
                                 if (unaCasa == personajeSeleccionado.getCasa()) {
-                                    jquery_1.default("#opt" + unaCasa).prop("checked", true);
+                                    $("#opt" + unaCasa).prop("checked", true);
                                 }
                                 else {
-                                    jquery_1.default("#opt" + unaCasa).prop("checked", false);
+                                    $("#opt" + unaCasa).prop("checked", false);
                                 }
                             }
                         }
@@ -189,11 +190,11 @@ var App = (function () {
                     else {
                         for (var unaCasa in ECasa) {
                             if (isNaN(Number(unaCasa))) {
-                                if (unaCasa == ECasa.stark) {
-                                    jquery_1.default("#opt" + unaCasa).prop("checked", true);
+                                if (unaCasa == ECasa.Stark) {
+                                    $("#opt" + unaCasa).prop("checked", true);
                                 }
                                 else {
-                                    jquery_1.default("#opt" + unaCasa).prop("checked", false);
+                                    $("#opt" + unaCasa).prop("checked", false);
                                 }
                             }
                         }
@@ -201,80 +202,83 @@ var App = (function () {
                     break;
                 case "traidor":
                     if (personajeSeleccionado !== undefined) {
-                        jquery_1.default("#chkTraidor").prop("checked", personajeSeleccionado.getDinamico(atributo));
+                        $("#chkTraidor").prop("checked", personajeSeleccionado.getDinamico(value));
                     }
                     else {
-                        jquery_1.default("#chkTraidor").prop("checked", false);
+                        $("#chkTraidor").prop("checked", false);
                     }
                     break;
                 default:
                     if (personajeSeleccionado !== undefined) {
-                        jquery_1.default("#txt" + atributoCapitalizado).val(personajeSeleccionado.getDinamico(atributo));
+                        $("#txt" + atributoCapitalizado).val(personajeSeleccionado.getDinamico(value));
                     }
                     else {
-                        if (atributo === "id") {
-                            jquery_1.default("#txt" + atributoCapitalizado).val(Personaje.getProximoId());
+                        if (value === "id") {
+                            $("#txt" + atributoCapitalizado).val(Personaje.getProximoId());
                         }
                         else {
-                            jquery_1.default("#txt" + atributoCapitalizado).val("");
+                            $("#txt" + atributoCapitalizado).val("");
                         }
                     }
                     break;
             }
-        }
+        });
     };
     App.ocultarFormulario = function () {
-        App.activarMenu(jquery_1.default("#btnGetPersonajes"));
-        jquery_1.default("#btnAltaPersonaje").css("pointer-events", "auto");
-        jquery_1.default("#btnEditarPersonaje").css("pointer-events", "none");
+        App.activarMenu($("#btnGetPersonajes"));
+        $("#btnAltaPersonaje").css("pointer-events", "auto");
+        $("#btnEditarPersonaje").css("pointer-events", "none");
         App.blanquearFila();
-        jquery_1.default("#tablaPersonajes").css("display", "table");
-        jquery_1.default("#formularioPersonajes").css("display", "none");
+        $("#tablaPersonajes").css("display", "table");
+        $("#formularioPersonajes").css("display", "none");
     };
     App.crearCabecera = function (personajes, tablaPersonajes) {
         tablaPersonajes.append("<tr id=filaCabecera>");
-        var fila = jquery_1.default("#filaCabecera");
-        for (var atributo in personajes[0]) {
-            fila.append("<th>" + atributo);
-        }
+        var fila = $("#filaCabecera");
+        personajes[0].getAtributos().forEach(function (value) {
+            fila.append("<th>" + value);
+        });
     };
     App.crearDetalle = function (tablaPersonajes, datos) {
         var filaDetalle;
-        for (var i = 0; i < datos.length; i++) {
+        var _loop_1 = function (i) {
             tablaPersonajes.append("<tr id=filaDetalle" + i + ">");
-            filaDetalle = jquery_1.default("#filaDetalle" + i);
+            filaDetalle = $("#filaDetalle" + i);
             filaDetalle.on("click", App.seleccionarFila);
-            for (var atributo in datos[i]) {
-                if (atributo == "traidor") {
-                    if (datos[i][atributo]) {
-                        filaDetalle.append("<td id=ColumnaDetalle" + atributo + i + ">Si");
+            datos[i].getAtributos().forEach(function (value) {
+                if (value == "traidor") {
+                    if (datos[i][value]) {
+                        filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">Si");
                     }
                     else {
-                        filaDetalle.append("<td id=ColumnaDetalle" + atributo + i + ">No");
+                        filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">No");
                     }
                 }
                 else {
-                    filaDetalle.append("<td id=ColumnaDetalle" + atributo + i + ">" + datos[i][atributo]);
+                    filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">" + datos[i][value]);
                 }
-                jquery_1.default("#ColumnaDetalle" + atributo + i).attr("class", atributo);
-            }
+                $("#ColumnaDetalle" + value + i).attr("class", value);
+            });
+        };
+        for (var i = 0; i < datos.length; i++) {
+            _loop_1(i);
         }
     };
     App.blanquearFila = function () {
-        jquery_1.default("#filaSeleccionada").removeAttr("id");
+        $("#filaSeleccionada").removeAttr("id");
     };
     App.seleccionarFila = function () {
-        var filaActual = jquery_1.default(this);
+        var filaActual = $(this);
         var personajeSeleccionado = App.cargarPersonajeSeleccionado();
-        jquery_1.default("#btnEditarPersonaje").css("pointer-events", "auto");
+        $("#btnEditarPersonaje").css("pointer-events", "auto");
         App.blanquearFila();
         filaActual.attr("id", "filaSeleccionada");
         filaActual.children().each(function () {
-            if (jquery_1.default(this).attr("class") == "traidor") {
-                personajeSeleccionado[jquery_1.default(this).attr("class")] = (jquery_1.default(this).text() == "Si");
+            if ($(this).attr("class") == "traidor") {
+                personajeSeleccionado[$(this).attr("class")] = ($(this).text() == "Si");
             }
             else {
-                personajeSeleccionado[jquery_1.default(this).attr("class")] = jquery_1.default(this).text();
+                personajeSeleccionado[$(this).attr("class")] = $(this).text();
             }
         });
     };
@@ -299,7 +303,7 @@ var App = (function () {
         personaje.setId(proximoID);
         nuevoPersonaje.push(personaje);
         App.ocultarFormulario();
-        App.crearDetalle(jquery_1.default("#tablaPersonajes"), nuevoPersonaje);
+        App.crearDetalle($("#tablaPersonajes"), nuevoPersonaje);
         if (personajes[0].getId() == null) {
             personajes[0] = personaje;
         }
@@ -320,7 +324,7 @@ var App = (function () {
         if (index != -1) {
             personajes.splice(index, 1);
             alert("Personaje:\n\n" + personaje.toString() + "\n\nfue borrada de la tabla");
-            jquery_1.default("#filaSeleccionada").remove();
+            $("#filaSeleccionada").remove();
         }
         App.ocultarFormulario();
         localStorage.setItem("personajes", JSON.stringify(personajes));
@@ -342,40 +346,39 @@ var App = (function () {
         localStorage.setItem("personajes", JSON.stringify(personajes));
     };
     App.modificarFilaSeleccionada = function (datos) {
-        var filaSeleccionada = jquery_1.default("#filaSeleccionada");
+        var filaSeleccionada = $("#filaSeleccionada");
         filaSeleccionada.children().each(function () {
-            if (jquery_1.default(this).attr("class") == "traidor") {
-                if (datos[jquery_1.default(this).attr("class")]) {
-                    jquery_1.default(this).text("Si");
+            if ($(this).attr("class") == "traidor") {
+                if (datos[$(this).attr("class")]) {
+                    $(this).text("Si");
                 }
                 else {
-                    jquery_1.default(this).text("No");
+                    $(this).text("No");
                 }
             }
             else {
-                jquery_1.default(this).text(datos[jquery_1.default(this).attr("class")]);
+                $(this).text(datos[$(this).attr("class")]);
             }
         });
     };
     App.personajeEditado = function (personajes) {
         var personaje = new Personaje();
-        for (var atributo in personajes[0]) {
-            switch (atributo) {
+        personajes[0].getAtributos().forEach(function (value) {
+            switch (value) {
                 case "casa":
-                    var valor = String(jquery_1.default('input[name="casa"]:checked').val());
+                    var valor = String($('input[name="casa"]:checked').val());
                     personaje.setCasaStr(valor);
                     break;
                 case "traidor":
-                    personaje.setEsTraidor(jquery_1.default("#chkTraidor").prop("checked"));
+                    personaje.setEsTraidor($("#chkTraidor").prop("checked"));
                     break;
                 default:
-                    var atributoCapitalizado = atributo.charAt(0).toUpperCase() + atributo.slice(1).toLowerCase();
-                    personaje.setDinamico(atributo, jquery_1.default("#txt" + atributoCapitalizado).val());
+                    var atributoCapitalizado = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+                    personaje.setDinamico(value, $("#txt" + atributoCapitalizado).val());
                     break;
             }
-        }
+        });
         return personaje;
     };
     return App;
 }());
-exports.App = App;

@@ -150,7 +150,7 @@ class Personaje
             case "casa":
                 valor = this.getCasa();
                 break;
-            case "esTraidor":
+            case "traidor":
                 valor = this.getEsTraidor();
                 break;
             default:
@@ -180,7 +180,7 @@ class Personaje
             case "casa":
                 this.setCasa(valor);
                 break;
-            case "esTraidor":
+            case "traidor":
                 this.setEsTraidor(valor);
                 break;
         }
@@ -198,5 +198,10 @@ class Personaje
         texto += "ES TRAIDOR: " + this.getEsTraidorStr();
     
         return texto;
+    }
+
+    public getAtributos():string[]
+    {
+        return ["id", "nombre", "apellido", "edad", "casa", "traidor"];
     }
 }
