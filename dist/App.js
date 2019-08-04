@@ -4,6 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jquery_1 = __importDefault(require("jquery"));
+window.onload = function () {
+    App.asignarManejadores();
+};
 var App = (function () {
     function App() {
     }
@@ -375,3 +378,4 @@ var App = (function () {
     };
     return App;
 }());
+exports.App = App;
