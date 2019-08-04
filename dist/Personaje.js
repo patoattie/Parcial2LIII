@@ -18,17 +18,32 @@ var Personaje = (function () {
     Personaje.prototype.getNombre = function () {
         return this.nombre;
     };
+    Personaje.prototype.setNombre = function (nombre) {
+        this.nombre = nombre;
+    };
     Personaje.prototype.getApellido = function () {
         return this.apellido;
+    };
+    Personaje.prototype.setApellido = function (apellido) {
+        this.apellido = apellido;
     };
     Personaje.prototype.getEdad = function () {
         return this.edad;
     };
+    Personaje.prototype.setEdad = function (edad) {
+        this.edad = edad;
+    };
     Personaje.prototype.getCasa = function () {
         return this.casa;
     };
+    Personaje.prototype.setCasa = function (casa) {
+        this.casa = casa;
+    };
     Personaje.prototype.getEsTraidor = function () {
         return this.esTraidor;
+    };
+    Personaje.prototype.setEsTraidor = function (esTraidor) {
+        this.esTraidor = esTraidor;
     };
     Personaje.prototype.getEsTraidorStr = function () {
         var retorno;
@@ -39,6 +54,14 @@ var Personaje = (function () {
             retorno = "No";
         }
         return retorno;
+    };
+    Personaje.prototype.setEsTraidorStr = function (esTraidor) {
+        if (esTraidor == "Si") {
+            this.setEsTraidor(true);
+        }
+        else if (esTraidor == "No") {
+            this.setEsTraidor(false);
+        }
     };
     Personaje.prototype.getDinamico = function (atributo) {
         var valor;
@@ -66,6 +89,28 @@ var Personaje = (function () {
                 break;
         }
         return valor;
+    };
+    Personaje.prototype.setDinamico = function (atributo, valor) {
+        switch (atributo) {
+            case "id":
+                this.setId(valor);
+                break;
+            case "nombre":
+                this.setNombre(valor);
+                break;
+            case "apellido":
+                this.setApellido(valor);
+                break;
+            case "edad":
+                this.setEdad(valor);
+                break;
+            case "casa":
+                this.setCasa(valor);
+                break;
+            case "esTraidor":
+                this.setEsTraidor(valor);
+                break;
+        }
     };
     Personaje.prototype.toString = function () {
         var texto = "";

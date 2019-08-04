@@ -46,9 +46,19 @@ class Personaje
         return this.nombre;
     }
 
+    public setNombre(nombre:string):void
+    {
+        this.nombre = nombre;
+    }
+
     public getApellido():string
     {
         return this.apellido;
+    }
+
+    public setApellido(apellido:string):void
+    {
+        this.apellido = apellido;
     }
 
     public getEdad():number
@@ -56,14 +66,29 @@ class Personaje
         return this.edad;
     }
 
+    public setEdad(edad:number):void
+    {
+        this.edad = edad;
+    }
+
     public getCasa():ECasa
     {
         return this.casa;
     }
 
+    public setCasa(casa:ECasa):void
+    {
+        this.casa = casa;
+    }
+
     public getEsTraidor():boolean
     {
         return this.esTraidor;
+    }
+
+    public setEsTraidor(esTraidor:boolean):void
+    {
+        this.esTraidor = esTraidor;
     }
 
     public getEsTraidorStr():string
@@ -80,6 +105,18 @@ class Personaje
         }
 
         return retorno;
+    }
+
+    public setEsTraidorStr(esTraidor:string):void
+    {
+        if(esTraidor == "Si")
+        {
+            this.setEsTraidor(true);
+        }
+        else if(esTraidor == "No")
+        {
+            this.setEsTraidor(false);
+        }
     }
 
     public getDinamico(atributo:string):any
@@ -112,6 +149,31 @@ class Personaje
         }
 
         return valor;
+    }
+
+    public setDinamico(atributo:string, valor:any):void
+    {
+        switch(atributo)
+        {
+            case "id":
+                this.setId(valor);
+                break;
+            case "nombre":
+                this.setNombre(valor);
+                break;
+            case "apellido":
+                this.setApellido(valor);
+                break;
+            case "edad":
+                this.setEdad(valor);
+                break;
+            case "casa":
+                this.setCasa(valor);
+                break;
+            case "esTraidor":
+                this.setEsTraidor(valor);
+                break;
+        }
     }
 
     public toString():string
