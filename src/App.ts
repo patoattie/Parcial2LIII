@@ -27,7 +27,7 @@ class App
         $("#btnAltaPersonaje").css("pointer-events", "auto");
     }
     
-    public static activarMenu(elemento:JQuery):void
+    public static activarMenu(elemento:JQuery<HTMLElement>):void
     {        
         if($(".active")[0])
         {
@@ -92,10 +92,10 @@ class App
     public static crearTabla(personajes:Personaje[]):void
     {
         let puedeCrearDetalle:boolean = true; //Si no tengo elementos desde el servidor cambia a false.
-        let div:JQuery = $("#info");
+        let div:JQuery<HTMLElement> = $("#info");
 
         div.append("<table>");
-        let tablaPersonajes:JQuery = $("#info").children("table");
+        let tablaPersonajes:JQuery<HTMLElement> = $("#info").children("table");
 
         tablaPersonajes.attr("id", "tablaPersonajes");
         $("#tablaPersonajes").attr({"border": "1px", "class": "tablaPersonajes"});
@@ -106,11 +106,11 @@ class App
             puedeCrearDetalle = false;
         }
 
-        crearCabecera(personajes, $("#tablaPersonajes"));
+        App.crearCabecera(personajes, $("#tablaPersonajes"));
 
         if(puedeCrearDetalle)
         {
-            crearDetalle(personajes, tablaPersonajes, personajes);
+            App.crearDetalle(tablaPersonajes, personajes);
         }
     }
 
@@ -119,18 +119,18 @@ class App
     //y en la modificación no se altera su valor.
     public static crearFormulario(personajes:Personaje[]):void
     {
-        let div:JQuery = $("#info");
+        let div:JQuery<HTMLElement> = $("#info");
 
         div.append("<form id=formularioPersonajes>");
-        let formulario:JQuery = $("#formularioPersonajes")
+        let formulario:JQuery<HTMLElement> = $("#formularioPersonajes")
         formulario.attr("action", "#");
         formulario.css("display", "none");
 
         formulario.append("<fieldset id=grupo>");
-        let grupo:JQuery = $("#grupo");
+        let grupo:JQuery<HTMLElement> = $("#grupo");
         
         grupo.append("<legend id=leyenda>");
-        let leyenda:JQuery = $("#leyenda");
+        let leyenda:JQuery<HTMLElement> = $("#leyenda");
         leyenda.text("Personaje");
 
         for(let atributo in personajes[0])
@@ -139,9 +139,9 @@ class App
             {
                 case "casa":
                     grupo.append("<fieldset id=grupoCasa>");
-                    let grupoCasa:JQuery = $("#grupoCasa");
+                    let grupoCasa:JQuery<HTMLElement> = $("#grupoCasa");
                     grupoCasa.append("<legend id=leyendaCasa>");
-                    let leyendaCasa:JQuery = $("#leyendaCasa");
+                    let leyendaCasa:JQuery<HTMLElement> = $("#leyendaCasa");
 
                     grupoCasa.attr("class", "grupoInterno");
                     leyendaCasa.text("Casa");
@@ -151,9 +151,9 @@ class App
                         if(isNaN(Number(unaCasa))) //Para que no traiga los índices
                         {
                             grupoCasa.append("<input id=opt" + unaCasa + ">");
-                            let optButton:JQuery = $("#opt" + unaCasa);
+                            let optButton:JQuery<HTMLElement> = $("#opt" + unaCasa);
                             grupoCasa.append("<label id=etiqueta" + unaCasa + ">");
-                            let etiquetaCasa:JQuery = $("#etiqueta" + unaCasa);
+                            let etiquetaCasa:JQuery<HTMLElement> = $("#etiqueta" + unaCasa);
 
                             etiquetaCasa.attr("for", "opt" + unaCasa);
                             etiquetaCasa.text(unaCasa);
@@ -171,11 +171,11 @@ class App
 
                 case "traidor":
                     grupo.append("<fieldset id=grupoTraidor>");
-                    let grupoTraidor:JQuery = $("#grupoTraidor");
+                    let grupoTraidor:JQuery<HTMLElement> = $("#grupoTraidor");
                     grupoTraidor.append("<input id=chkTraidor>");
-                    let chkTraidor:JQuery = $("#chkTraidor");
+                    let chkTraidor:JQuery<HTMLElement> = $("#chkTraidor");
                     grupoTraidor.append("<label id=etiquetaTraidor>");
-                    let etiquetaTraidor:JQuery = $("#etiquetaTraidor");
+                    let etiquetaTraidor:JQuery<HTMLElement> = $("#etiquetaTraidor");
 
                     grupoTraidor.attr("class", "grupoInterno");
 
@@ -192,9 +192,9 @@ class App
                 default:
                     let atributoCapitalizado:string = atributo.charAt(0).toUpperCase() + atributo.slice(1).toLowerCase(); //Primer letra en mayuscula, resto minuscula
                     grupo.append("<label id=etiqueta" + atributo + ">");
-                    let etiqueta:JQuery = $("#etiqueta" + atributo);
+                    let etiqueta:JQuery<HTMLElement> = $("#etiqueta" + atributo);
                     grupo.append("<input id=txt" + atributoCapitalizado + ">");
-                    let cuadroTexto:JQuery = $("#txt" + atributoCapitalizado);
+                    let cuadroTexto:JQuery<HTMLElement> = $("#txt" + atributoCapitalizado);
             
                     etiqueta.attr("for", "txt" + atributoCapitalizado);
                     etiqueta.text(atributoCapitalizado + ": ");
@@ -211,13 +211,13 @@ class App
         }
 
         grupo.append("<input id=btnAgregar>");
-        let btnAgregar:JQuery = $("#btnAgregar");
+        let btnAgregar:JQuery<HTMLElement> = $("#btnAgregar");
         grupo.append("<input id=btnModificar>");
-        let btnModificar:JQuery = $("#btnModificar");
+        let btnModificar:JQuery<HTMLElement> = $("#btnModificar");
         grupo.append("<input id=btnBorrar>");
-        let btnBorrar:JQuery = $("#btnBorrar");
+        let btnBorrar:JQuery<HTMLElement> = $("#btnBorrar");
         grupo.append("<input id=btnCancelar>");
-        let btnCancelar:JQuery = $("#btnCancelar");
+        let btnCancelar:JQuery<HTMLElement> = $("#btnCancelar");
 
         btnAgregar.attr("type", "button");
         btnAgregar.val("Agregar");
@@ -331,5 +331,256 @@ class App
                         break;
             }
         }
+    }
+
+    //Oculta el formulario de edición y muestra la tabla de personajes.
+    //Se blanquea cualquier fila que se haya previamente seleccionado.
+    public static ocultarFormulario():void
+    {
+        App.activarMenu($("#btnGetPersonajes"));
+
+        $("#btnAltaPersonaje").css("pointer-events", "auto");
+        $("#btnEditarPersonaje").css("pointer-events", "none");
+
+        App.blanquearFila();
+
+        $("#tablaPersonajes").css("display","table");
+        $("#formularioPersonajes").css("display","none");
+    }
+
+    //Crea la fila de cabecera, con tantas columnas como atributos posea la personaje, en la tabla de personajes.
+    public static crearCabecera(personajes:Personaje[], tablaPersonajes:JQuery<HTMLElement>):void
+    {
+        tablaPersonajes.append("<tr id=filaCabecera>");
+        let fila:JQuery<HTMLElement> = $("#filaCabecera");
+
+        for(let atributo in personajes[0])
+        {
+            fila.append("<th>" + atributo);
+        }
+    }
+
+    //Crea tantas fila de detalle en la tabla de personajes como personajes haya cargadas.
+    public static crearDetalle(tablaPersonajes:JQuery<HTMLElement>, datos:Personaje[]):void
+    {
+        let filaDetalle:JQuery<HTMLElement>;
+        for(let i:number = 0; i < datos.length; i++)
+        {
+            tablaPersonajes.append("<tr id=filaDetalle" + i + ">");
+            filaDetalle = $("#filaDetalle" + i);
+            //let columna;
+            filaDetalle.on("click", seleccionarFila);
+
+            for(let atributo in datos[i])
+            {
+                //filaDetalle.append("<td>");
+                //columna = filaDetalle.children("td");
+                //columna.attr("class", atributo);
+
+                if(atributo == "traidor")
+                {
+                    if(datos[i][atributo])
+                    {
+                        filaDetalle.append("<td id=ColumnaDetalle" + atributo + i + ">Si");
+                    }
+                    else
+                    {
+                        filaDetalle.append("<td id=ColumnaDetalle" + atributo + i + ">No");
+                    }
+                }
+                else
+                {
+                    filaDetalle.append("<td id=ColumnaDetalle" + atributo + i + ">" + datos[i][atributo]);
+                }
+                //columna = filaDetalle.children("td");
+                $("#ColumnaDetalle" + atributo + i).attr("class", atributo);
+            }
+        }
+    }
+
+    //Quita el atributo id de la fila seleccionada.
+    public static blanquearFila():void
+    {
+        $("#filaSeleccionada").removeAttr("id");
+    }
+
+    //Cuando el usuario hace click en una fila de detalle de la tabla de personajes,
+    //la función le setea, previo a blanquear si hay otra fila antes seleccionada, 
+    //el atributo id a la fila y carga la personaje en el array de personaje seleccionada.
+    public static seleccionarFila():void
+    {
+        let filaActual:JQuery<App> = $(this);
+        //$("#btnEditarPersonaje").removeAttr("disabled");
+        $("#btnEditarPersonaje").css("pointer-events", "auto");
+        App.blanquearFila();
+        
+        filaActual.attr("id", "filaSeleccionada");
+
+        //Recorro las columnas de la fila seleccionada, guardando un atributo por columna en personajeSeleccionado.
+        filaActual.children().each(function()
+        {
+            if($(this).attr("class") == "traidor")
+            {
+                personajeSeleccionado[$(this).attr("class")] = ($(this).text() == "Si");
+            }
+            else
+            {
+                personajeSeleccionado[$(this).attr("class")] = $(this).text();
+            }
+        });
+    }
+
+    //Llamador usado por el evento dla opción de Agregar del formulario
+    public static opcionAgregarPersonaje():void
+    {
+        let personajes:Personaje[] = App.cargarArrayPersonajes();
+
+        App.agregarPersonaje(personajes, App.personajeEditado(personajes));
+    }
+
+    //Llamador usado por el evento dla opción de Borrar del formulario
+    public static opcionBorrarPersonaje():void
+    {
+        let personajes:Personaje[] = App.cargarArrayPersonajes();
+
+        App.borrarPersonaje(personajes, personajeSeleccionado);
+    }
+
+    //Llamador usado por el evento dla opción de Modificar del formulario
+    public static opcionModificarPersonaje():void
+    {
+        let personajes:Personaje[] = App.cargarArrayPersonajes();
+
+        App.modificarPersonaje(personajes, personajeSeleccionado, App.personajeEditado(personajes));
+    }
+
+    //Llama a la función altaPersonaje del servidor, pasándole el objeto que se quiere agregar por parámetro.
+    public static agregarPersonaje(personajes:Personaje[], personaje:Personaje):void
+    {
+        let nuevoPersonaje:Personaje[] = [];
+        let proximoID:number = parseInt(localStorage.getItem("ID"));
+
+        if(isNaN(proximoID))
+        {
+            proximoID = 20000;
+        }
+
+        personaje.setId(proximoID);
+
+        nuevoPersonaje.push(personaje);
+        App.ocultarFormulario();
+        App.crearDetalle($("#tablaPersonajes"), nuevoPersonaje);
+
+        if(personajes[0].getId() == null)
+        {
+            personajes[0] = personaje;
+        }
+        else
+        {
+            personajes.push(personaje);
+        }
+
+        proximoID++;
+
+        localStorage.setItem("personajes", JSON.stringify(personajes));
+        localStorage.setItem("ID", proximoID.toString());
+    }
+
+    //Llama a la función bajaPersonaje del servidor, pasándole el objeto que se quiere eliminar por parámetro.
+    public static borrarPersonaje(personajes:Personaje[], personaje:Personaje):void
+    {
+        let index:number = personajes.findIndex((per) => 
+        {
+            return per.id == personaje.getId();
+        });
+    
+        if (index != -1)
+        {
+            personajes.splice(index, 1);
+
+            alert("Personaje:\n\n" + personajeToString(personaje) + "\n\nfue borrada de la tabla");
+
+            $("#filaSeleccionada").remove();
+        }
+    
+        App.ocultarFormulario();
+
+        localStorage.setItem("personajes", JSON.stringify(personajes));
+    }
+
+    //Llama a la función modificarPersonaje del servidor, pasándole el objeto que se quiere modificar por parámetro.
+    public static modificarPersonaje(personajes:Personaje[], personaPre:Personaje, personaPost:Personaje):void
+    {
+        let index:number = personajes.findIndex((per) => 
+        {
+            return per.id == personaPost.id;
+        });
+    
+        if (index != -1)
+        {
+            personajes.splice(index, 1);
+            personajes.push(personaPost);
+
+            alert("Personaje:\n\n" + personajeToString(personaPre) + "\n\nfue modificada a:\n\n" + personajeToString(personaPost));
+            App.modificarFilaSeleccionada(personaPost);
+        }
+    
+        App.ocultarFormulario();
+
+        localStorage.setItem("personajes", JSON.stringify(personajes));
+    }
+
+    //Modifica los datos de la fila seleccionada con los datos de la personaje pasada por parámetro.
+    //Esta función la invoca la opción de modificar una personaje del servidor,
+    //una vez devuelto el ok del mismo.
+    public static modificarFilaSeleccionada(datos:Personaje):void
+    {
+        let filaSeleccionada:JQuery<HTMLElement> = $("#filaSeleccionada");
+
+        //Recorro las columnas de la fila seleccionada, guardando un atributo por columna en personajeSeleccionado.
+        //for(var i = 0; i < filaSeleccionada.children().length; i++)
+        filaSeleccionada.children().each(function()
+        {
+            if($(this).attr("class") == "traidor")
+            {
+                if(datos[$(this).attr("class")])
+                {
+                    $(this).text("Si");
+                }
+                else
+                {
+                    $(this).text("No");
+                }
+            }
+            else
+            {
+                $(this).text(datos[$(this).attr("class")]);
+            }
+        });
+    }
+
+    //Crea un objeto JSON a partir de los datos del formulario
+    public static personajeEditado(personajes:Personaje[])
+    {
+        let personaje:Personaje = {};
+
+        for(let atributo in personajes[0])
+        {
+            switch(atributo)
+            {
+                case "casa":
+                    personaje["casa"] = $("input[name=casa]:checked", '#grupoCasa').val();
+                    break;
+                case "traidor":
+                    personaje["traidor"] = $("#chkTraidor").prop("checked");
+                    break;
+                default:
+                    let atributoCapitalizado:string = atributo.charAt(0).toUpperCase() + atributo.slice(1).toLowerCase(); //Primer letra en mayuscula, resto minuscula
+                    personaje[atributo] = $("#txt" + atributoCapitalizado).val();
+                    break;
+            }
+        }
+
+        return personaje;
     }
 }

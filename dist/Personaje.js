@@ -18,6 +18,9 @@ var Personaje = (function () {
     Personaje.prototype.getId = function () {
         return this.id;
     };
+    Personaje.prototype.setId = function (id) {
+        this.id = id;
+    };
     Personaje.prototype.getNombre = function () {
         return this.nombre;
     };

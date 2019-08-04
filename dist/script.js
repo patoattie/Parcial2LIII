@@ -239,7 +239,7 @@ function crearTabla(personajes)
 
     if(puedeCrearDetalle)
     {
-        crearDetalle(personajes, tablaPersonajes, personajes);
+        crearDetalle(tablaPersonajes, personajes);
     }
 }
 

@@ -36,6 +36,11 @@ class Personaje
         return this.id;
     }
 
+    public setId(id:number):void
+    {
+        this.id = id;
+    }
+
     public getNombre():string
     {
         return this.nombre;
