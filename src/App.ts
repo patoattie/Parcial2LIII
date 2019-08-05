@@ -25,7 +25,7 @@ class App
         $("#info").html("");
     
         let personajes:Personaje[] = App.cargarArrayPersonajes();
-console.log(personajes);
+
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
     
@@ -56,31 +56,17 @@ console.log(personajes);
         {
             for(let i:number = 0; i < storage.length; i++)
             {
-                personajes[i] = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
-                //personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
+                personajes[i] = new Personaje(storage[i]["id"], storage[i]["nombre"], storage[i]["apellido"], storage[i]["edad"], storage[i]["casa"], storage[i]["traidor"]);
             }
         }
-
-        //let personajes:Personaje[] = JSON.parse(localStorage.getItem("personajes"));
     
         return personajes;
     }
 
     public static cargarPersonajeSeleccionado():Personaje
     {
-        /*let personajes:Personaje[] = [];
-        let storage:Personaje[] = JSON.parse(localStorage.getItem("personajes"));
-    
-        if(storage == null || storage[0] == undefined) //Si el servidor no trae nada creo la estructura vacía.
-        {
-            personajes[0] = new Personaje; //{"id":null,"nombre":null,"apellido":null,"edad":null,"casa":null,"esTraidor":null};
-        }
-        else
-        {
-            personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
-        }*/
-
-        let personajeSeleccionado:Personaje = JSON.parse(localStorage.getItem("personajeSeleccionado"));
+        let storage:Personaje = JSON.parse(localStorage.getItem("personajeSeleccionado"));
+        let personajeSeleccionado:Personaje = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
     
         return personajeSeleccionado;
     }
@@ -445,7 +431,8 @@ console.log(personajes);
     public static seleccionarFila():void
     {
         let filaActual:JQuery<App> = $(this);
-        let personajeSeleccionado = App.cargarPersonajeSeleccionado();
+        //let personajeSeleccionado:Personaje = App.cargarPersonajeSeleccionado();
+        let personajeSeleccionado:Personaje = new Personaje();
         //$("#btnEditarPersonaje").removeAttr("disabled");
         $("#btnEditarPersonaje").css("pointer-events", "auto");
         App.blanquearFila();
@@ -457,13 +444,17 @@ console.log(personajes);
         {
             if($(this).attr("class") == "traidor")
             {
-                personajeSeleccionado[$(this).attr("class")] = ($(this).text() == "Si");
+                //personajeSeleccionado[$(this).attr("class")] = ($(this).text() == "Si");
+                personajeSeleccionado.setEsTraidorStr($(this).text());
             }
             else
             {
-                personajeSeleccionado[$(this).attr("class")] = $(this).text();
+                //personajeSeleccionado[$(this).attr("class")] = $(this).text();
+                personajeSeleccionado.setDinamico($(this).attr("class"), $(this).text());
             }
         });
+
+        localStorage.setItem("personajeSeleccionado", JSON.stringify(personajeSeleccionado));
     }
 
     //Llamador usado por el evento dla opción de Agregar del formulario

@@ -13,7 +13,6 @@ var App = (function () {
         App.activarMenu($("#btnGetPersonajes"));
         $("#info").html("");
         var personajes = App.cargarArrayPersonajes();
-        console.log(personajes);
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
         $("#btnGetPersonajes").css("pointer-events", "auto");
@@ -33,13 +32,14 @@ var App = (function () {
         }
         else {
             for (var i = 0; i < storage.length; i++) {
-                personajes[i] = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
+                personajes[i] = new Personaje(storage[i]["id"], storage[i]["nombre"], storage[i]["apellido"], storage[i]["edad"], storage[i]["casa"], storage[i]["traidor"]);
             }
         }
         return personajes;
     };
     App.cargarPersonajeSeleccionado = function () {
-        var personajeSeleccionado = JSON.parse(localStorage.getItem("personajeSeleccionado"));
+        var storage = JSON.parse(localStorage.getItem("personajeSeleccionado"));
+        var personajeSeleccionado = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
         return personajeSeleccionado;
     };
     App.altaPersonaje = function () {
@@ -272,18 +272,19 @@ var App = (function () {
     };
     App.seleccionarFila = function () {
         var filaActual = $(this);
-        var personajeSeleccionado = App.cargarPersonajeSeleccionado();
+        var personajeSeleccionado = new Personaje();
         $("#btnEditarPersonaje").css("pointer-events", "auto");
         App.blanquearFila();
         filaActual.attr("id", "filaSeleccionada");
         filaActual.children().each(function () {
             if ($(this).attr("class") == "traidor") {
-                personajeSeleccionado[$(this).attr("class")] = ($(this).text() == "Si");
+                personajeSeleccionado.setEsTraidorStr($(this).text());
             }
             else {
-                personajeSeleccionado[$(this).attr("class")] = $(this).text();
+                personajeSeleccionado.setDinamico($(this).attr("class"), $(this).text());
             }
         });
+        localStorage.setItem("personajeSeleccionado", JSON.stringify(personajeSeleccionado));
     };
     App.opcionAgregarPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();

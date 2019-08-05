@@ -166,7 +166,6 @@ var App = /** @class */ (function () {
         App.activarMenu($("#btnGetPersonajes"));
         $("#info").html("");
         var personajes = App.cargarArrayPersonajes();
-        console.log(personajes);
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
         $("#btnGetPersonajes").css("pointer-events", "auto");
@@ -187,26 +186,14 @@ var App = /** @class */ (function () {
         }
         else {
             for (var i = 0; i < storage.length; i++) {
-                personajes[i] = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
-                //personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
+                personajes[i] = new Personaje(storage[i]["id"], storage[i]["nombre"], storage[i]["apellido"], storage[i]["edad"], storage[i]["casa"], storage[i]["traidor"]);
             }
         }
-        //let personajes:Personaje[] = JSON.parse(localStorage.getItem("personajes"));
         return personajes;
     };
     App.cargarPersonajeSeleccionado = function () {
-        /*let personajes:Personaje[] = [];
-        let storage:Personaje[] = JSON.parse(localStorage.getItem("personajes"));
-    
-        if(storage == null || storage[0] == undefined) //Si el servidor no trae nada creo la estructura vacía.
-        {
-            personajes[0] = new Personaje; //{"id":null,"nombre":null,"apellido":null,"edad":null,"casa":null,"esTraidor":null};
-        }
-        else
-        {
-            personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
-        }*/
-        var personajeSeleccionado = JSON.parse(localStorage.getItem("personajeSeleccionado"));
+        var storage = JSON.parse(localStorage.getItem("personajeSeleccionado"));
+        var personajeSeleccionado = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
         return personajeSeleccionado;
     };
     //Oculta la tabla de personajes, y muestra el formulario invocando la función pertinente
@@ -476,7 +463,8 @@ var App = /** @class */ (function () {
     //el atributo id a la fila y carga la personaje en el array de personaje seleccionada.
     App.seleccionarFila = function () {
         var filaActual = $(this);
-        var personajeSeleccionado = App.cargarPersonajeSeleccionado();
+        //let personajeSeleccionado:Personaje = App.cargarPersonajeSeleccionado();
+        var personajeSeleccionado = new Personaje();
         //$("#btnEditarPersonaje").removeAttr("disabled");
         $("#btnEditarPersonaje").css("pointer-events", "auto");
         App.blanquearFila();
@@ -484,12 +472,15 @@ var App = /** @class */ (function () {
         //Recorro las columnas de la fila seleccionada, guardando un atributo por columna en personajeSeleccionado.
         filaActual.children().each(function () {
             if ($(this).attr("class") == "traidor") {
-                personajeSeleccionado[$(this).attr("class")] = ($(this).text() == "Si");
+                //personajeSeleccionado[$(this).attr("class")] = ($(this).text() == "Si");
+                personajeSeleccionado.setEsTraidorStr($(this).text());
             }
             else {
-                personajeSeleccionado[$(this).attr("class")] = $(this).text();
+                //personajeSeleccionado[$(this).attr("class")] = $(this).text();
+                personajeSeleccionado.setDinamico($(this).attr("class"), $(this).text());
             }
         });
+        localStorage.setItem("personajeSeleccionado", JSON.stringify(personajeSeleccionado));
     };
     //Llamador usado por el evento dla opción de Agregar del formulario
     App.opcionAgregarPersonaje = function () {
