@@ -1,5 +1,11 @@
 var Personaje = (function () {
-    function Personaje() {
+    function Personaje(id, nombre, apellido, edad, casa, esTraidor) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.edad = edad;
+        this.casa = ECasa[casa];
+        this.esTraidor = esTraidor;
     }
     Personaje.getProximoId = function () {
         var proximoID = Number(localStorage.getItem("ID"));

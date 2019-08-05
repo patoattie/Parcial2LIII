@@ -25,7 +25,7 @@ class App
         $("#info").html("");
     
         let personajes:Personaje[] = App.cargarArrayPersonajes();
-    
+console.log(personajes);
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
     
@@ -54,7 +54,11 @@ class App
         }
         else
         {
-            personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
+            for(let i:number = 0; i < storage.length; i++)
+            {
+                personajes[i] = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
+                //personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
+            }
         }
 
         //let personajes:Personaje[] = JSON.parse(localStorage.getItem("personajes"));

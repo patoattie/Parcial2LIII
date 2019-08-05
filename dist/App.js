@@ -13,6 +13,7 @@ var App = (function () {
         App.activarMenu($("#btnGetPersonajes"));
         $("#info").html("");
         var personajes = App.cargarArrayPersonajes();
+        console.log(personajes);
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
         $("#btnGetPersonajes").css("pointer-events", "auto");
@@ -31,7 +32,9 @@ var App = (function () {
             personajes[0] = new Personaje();
         }
         else {
-            personajes = storage;
+            for (var i = 0; i < storage.length; i++) {
+                personajes[i] = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
+            }
         }
         return personajes;
     };

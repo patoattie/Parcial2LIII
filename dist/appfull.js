@@ -5,17 +5,14 @@ var ECasa;
     ECasa["Lannister"] = "Lannister";
 })(ECasa || (ECasa = {}));
 var Personaje = /** @class */ (function () {
-    function Personaje() {
-    }
-    /*constructor(nombre:string, apellido:string, edad:number, casa:ECasa, esTraidor:boolean)
-    {
-        this.id = Personaje.getProximoId();
+    function Personaje(id, nombre, apellido, edad, casa, esTraidor) {
+        this.id = id; //Personaje.getProximoId();
         this.nombre = nombre;
         this.apellido = apellido;
         this.edad = edad;
-        this.casa = casa;
+        this.casa = ECasa[casa];
         this.esTraidor = esTraidor;
-    }*/
+    }
     Personaje.getProximoId = function () {
         var proximoID = Number(localStorage.getItem("ID"));
         if (isNaN(proximoID)) {
@@ -169,6 +166,7 @@ var App = /** @class */ (function () {
         App.activarMenu($("#btnGetPersonajes"));
         $("#info").html("");
         var personajes = App.cargarArrayPersonajes();
+        console.log(personajes);
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
         $("#btnGetPersonajes").css("pointer-events", "auto");
@@ -188,7 +186,10 @@ var App = /** @class */ (function () {
             personajes[0] = new Personaje(); //{"id":null,"nombre":null,"apellido":null,"edad":null,"casa":null,"esTraidor":null};
         }
         else {
-            personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
+            for (var i = 0; i < storage.length; i++) {
+                personajes[i] = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
+                //personajes = storage; //Respuesta de texto del servidor (JSON), lo convierto a objeto
+            }
         }
         //let personajes:Personaje[] = JSON.parse(localStorage.getItem("personajes"));
         return personajes;
