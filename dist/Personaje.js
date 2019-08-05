@@ -12,8 +12,11 @@ var Personaje = (function () {
         if (isNaN(proximoID)) {
             proximoID = 20000;
         }
-        localStorage.setItem("ID", String(proximoID++));
         return proximoID;
+    };
+    Personaje.setProximoId = function () {
+        var proximoID = this.getProximoId();
+        localStorage.setItem("ID", String());
     };
     Personaje.prototype.getId = function () {
         return this.id;

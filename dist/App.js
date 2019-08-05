@@ -11,7 +11,7 @@ var App = (function () {
     };
     App.traerPersonajes = function () {
         App.activarMenu($("#btnGetPersonajes"));
-        $("#info").html("");
+        $("#info").empty();
         var personajes = App.cargarArrayPersonajes();
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
@@ -32,14 +32,14 @@ var App = (function () {
         }
         else {
             for (var i = 0; i < storage.length; i++) {
-                personajes[i] = new Personaje(storage[i]["id"], storage[i]["nombre"], storage[i]["apellido"], storage[i]["edad"], storage[i]["casa"], storage[i]["traidor"]);
+                personajes[i] = new Personaje(storage[i]["id"], storage[i]["nombre"], storage[i]["apellido"], storage[i]["edad"], storage[i]["casa"], storage[i]["esTraidor"]);
             }
         }
         return personajes;
     };
     App.cargarPersonajeSeleccionado = function () {
         var storage = JSON.parse(localStorage.getItem("personajeSeleccionado"));
-        var personajeSeleccionado = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
+        var personajeSeleccionado = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["esTraidor"]);
         return personajeSeleccionado;
     };
     App.altaPersonaje = function () {
@@ -250,7 +250,7 @@ var App = (function () {
             filaDetalle.on("click", App.seleccionarFila);
             datos[i].getAtributos().forEach(function (value) {
                 if (value == "traidor") {
-                    if (datos[i][value]) {
+                    if (datos[i].getEsTraidor()) {
                         filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">Si");
                     }
                     else {
@@ -258,7 +258,7 @@ var App = (function () {
                     }
                 }
                 else {
-                    filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">" + datos[i][value]);
+                    filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">" + datos[i].getDinamico(value));
                 }
                 $("#ColumnaDetalle" + value + i).attr("class", value);
             });

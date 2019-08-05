@@ -164,7 +164,8 @@ var App = /** @class */ (function () {
     //Llama a la función traerPersonajes del localStorage, luego con los datos devueltos se crean en el DOM la tabla y el formulario de edición.
     App.traerPersonajes = function () {
         App.activarMenu($("#btnGetPersonajes"));
-        $("#info").html("");
+        //$("#info").html("");
+        $("#info").empty();
         var personajes = App.cargarArrayPersonajes();
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
@@ -186,14 +187,14 @@ var App = /** @class */ (function () {
         }
         else {
             for (var i = 0; i < storage.length; i++) {
-                personajes[i] = new Personaje(storage[i]["id"], storage[i]["nombre"], storage[i]["apellido"], storage[i]["edad"], storage[i]["casa"], storage[i]["traidor"]);
+                personajes[i] = new Personaje(storage[i]["id"], storage[i]["nombre"], storage[i]["apellido"], storage[i]["edad"], storage[i]["casa"], storage[i]["esTraidor"]);
             }
         }
         return personajes;
     };
     App.cargarPersonajeSeleccionado = function () {
         var storage = JSON.parse(localStorage.getItem("personajeSeleccionado"));
-        var personajeSeleccionado = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["traidor"]);
+        var personajeSeleccionado = new Personaje(storage["id"], storage["nombre"], storage["apellido"], storage["edad"], storage["casa"], storage["esTraidor"]);
         return personajeSeleccionado;
     };
     //Oculta la tabla de personajes, y muestra el formulario invocando la función pertinente
@@ -436,7 +437,7 @@ var App = /** @class */ (function () {
                 //columna = filaDetalle.children("td");
                 //columna.attr("class", value);
                 if (value == "traidor") {
-                    if (datos[i][value]) {
+                    if (datos[i].getEsTraidor()) {
                         filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">Si");
                     }
                     else {
@@ -444,7 +445,7 @@ var App = /** @class */ (function () {
                     }
                 }
                 else {
-                    filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">" + datos[i][value]);
+                    filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">" + datos[i].getDinamico(value));
                 }
                 //columna = filaDetalle.children("td");
                 $("#ColumnaDetalle" + value + i).attr("class", value);

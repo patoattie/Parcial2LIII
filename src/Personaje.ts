@@ -26,9 +26,16 @@ class Personaje
             proximoID = 20000;
         }
     
-        localStorage.setItem("ID", String(proximoID++));
+        //localStorage.setItem("ID", String(proximoID++));
 
         return proximoID;
+    }
+
+    public static setProximoId():void
+    {
+        let proximoID:number = this.getProximoId();
+
+        localStorage.setItem("ID", String();
     }
 
     public getId():number
