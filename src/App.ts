@@ -485,14 +485,8 @@ class App
     public static agregarPersonaje(personajes:Personaje[], personaje:Personaje):void
     {
         let nuevoPersonaje:Personaje[] = [];
-        let proximoID:number = parseInt(localStorage.getItem("ID"));
 
-        if(isNaN(proximoID))
-        {
-            proximoID = 20000;
-        }
-
-        personaje.setId(proximoID);
+        personaje.setId(Personaje.getProximoId());
 
         nuevoPersonaje.push(personaje);
         App.ocultarFormulario();
@@ -507,10 +501,8 @@ class App
             personajes.push(personaje);
         }
 
-        proximoID++;
-
         localStorage.setItem("personajes", JSON.stringify(personajes));
-        localStorage.setItem("ID", proximoID.toString());
+        Personaje.setProximoId();
     }
 
     //Llama a la función bajaPersonaje del servidor, pasándole el objeto que se quiere eliminar por parámetro.
@@ -521,19 +513,19 @@ class App
             return per.id == personaje.getId();
         });*/
 
-        let index:number = -1;
+        let posicion:number = -1;
 
-        personajes.forEach(unPersonaje =>
+        personajes.forEach(function(value:Personaje, index:number)
         {
-            if(unPersonaje.getId() == personaje.getId())
+            if(value.getId() == personaje.getId())
             {
-                index = unPersonaje.getId();
+                posicion = index;
             }
         });
     
-        if (index != -1)
+        if (posicion != -1)
         {
-            personajes.splice(index, 1);
+            personajes.splice(posicion, 1);
 
             alert("Personaje:\n\n" + personaje.toString() + "\n\nfue borrada de la tabla");
 
@@ -553,19 +545,19 @@ class App
             return per.id == personaPost.getId();
         });*/
     
-        let index:number = -1;
+        let posicion:number = -1;
 
-        personajes.forEach(unPersonaje =>
+        personajes.forEach(function(value:Personaje, index:number)
         {
-            if(unPersonaje.getId() == personaPost.getId())
+            if(value.getId() == personaPost.getId())
             {
-                index = unPersonaje.getId();
+                posicion = index;
             }
         });
 
-        if (index != -1)
+        if (posicion != -1)
         {
-            personajes.splice(index, 1);
+            personajes.splice(posicion, 1);
             personajes.push(personaPost);
 
             alert("Personaje:\n\n" + personaPre.toString() + "\n\nfue modificada a:\n\n" + personaPost.toString());

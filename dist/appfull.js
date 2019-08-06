@@ -15,11 +15,16 @@ var Personaje = /** @class */ (function () {
     }
     Personaje.getProximoId = function () {
         var proximoID = Number(localStorage.getItem("ID"));
-        if (isNaN(proximoID)) {
+        if (isNaN(proximoID) || proximoID == 0) {
             proximoID = 20000;
         }
-        localStorage.setItem("ID", String(proximoID++));
+        //localStorage.setItem("ID", String(proximoID++));
         return proximoID;
+    };
+    Personaje.setProximoId = function () {
+        var proximoID = this.getProximoId();
+        proximoID++;
+        localStorage.setItem("ID", String(proximoID));
     };
     Personaje.prototype.getId = function () {
         return this.id;
@@ -501,11 +506,7 @@ var App = /** @class */ (function () {
     //Llama a la función altaPersonaje del servidor, pasándole el objeto que se quiere agregar por parámetro.
     App.agregarPersonaje = function (personajes, personaje) {
         var nuevoPersonaje = [];
-        var proximoID = parseInt(localStorage.getItem("ID"));
-        if (isNaN(proximoID)) {
-            proximoID = 20000;
-        }
-        personaje.setId(proximoID);
+        personaje.setId(Personaje.getProximoId());
         nuevoPersonaje.push(personaje);
         App.ocultarFormulario();
         App.crearDetalle($("#tablaPersonajes"), nuevoPersonaje);
@@ -515,9 +516,8 @@ var App = /** @class */ (function () {
         else {
             personajes.push(personaje);
         }
-        proximoID++;
         localStorage.setItem("personajes", JSON.stringify(personajes));
-        localStorage.setItem("ID", proximoID.toString());
+        Personaje.setProximoId();
     };
     //Llama a la función bajaPersonaje del servidor, pasándole el objeto que se quiere eliminar por parámetro.
     App.borrarPersonaje = function (personajes, personaje) {
@@ -525,14 +525,14 @@ var App = /** @class */ (function () {
         {
             return per.id == personaje.getId();
         });*/
-        var index = -1;
-        personajes.forEach(function (unPersonaje) {
-            if (unPersonaje.getId() == personaje.getId()) {
-                index = unPersonaje.getId();
+        var posicion = -1;
+        personajes.forEach(function (value, index) {
+            if (value.getId() == personaje.getId()) {
+                posicion = index;
             }
         });
-        if (index != -1) {
-            personajes.splice(index, 1);
+        if (posicion != -1) {
+            personajes.splice(posicion, 1);
             alert("Personaje:\n\n" + personaje.toString() + "\n\nfue borrada de la tabla");
             $("#filaSeleccionada").remove();
         }
@@ -545,14 +545,14 @@ var App = /** @class */ (function () {
         {
             return per.id == personaPost.getId();
         });*/
-        var index = -1;
-        personajes.forEach(function (unPersonaje) {
-            if (unPersonaje.getId() == personaPost.getId()) {
-                index = unPersonaje.getId();
+        var posicion = -1;
+        personajes.forEach(function (value, index) {
+            if (value.getId() == personaPost.getId()) {
+                posicion = index;
             }
         });
-        if (index != -1) {
-            personajes.splice(index, 1);
+        if (posicion != -1) {
+            personajes.splice(posicion, 1);
             personajes.push(personaPost);
             alert("Personaje:\n\n" + personaPre.toString() + "\n\nfue modificada a:\n\n" + personaPost.toString());
             App.modificarFilaSeleccionada(personaPost);

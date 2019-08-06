@@ -300,11 +300,7 @@ var App = (function () {
     };
     App.agregarPersonaje = function (personajes, personaje) {
         var nuevoPersonaje = [];
-        var proximoID = parseInt(localStorage.getItem("ID"));
-        if (isNaN(proximoID)) {
-            proximoID = 20000;
-        }
-        personaje.setId(proximoID);
+        personaje.setId(Personaje.getProximoId());
         nuevoPersonaje.push(personaje);
         App.ocultarFormulario();
         App.crearDetalle($("#tablaPersonajes"), nuevoPersonaje);
@@ -314,19 +310,18 @@ var App = (function () {
         else {
             personajes.push(personaje);
         }
-        proximoID++;
         localStorage.setItem("personajes", JSON.stringify(personajes));
-        localStorage.setItem("ID", proximoID.toString());
+        Personaje.setProximoId();
     };
     App.borrarPersonaje = function (personajes, personaje) {
-        var index = -1;
-        personajes.forEach(function (unPersonaje) {
-            if (unPersonaje.getId() == personaje.getId()) {
-                index = unPersonaje.getId();
+        var posicion = -1;
+        personajes.forEach(function (value, index) {
+            if (value.getId() == personaje.getId()) {
+                posicion = index;
             }
         });
-        if (index != -1) {
-            personajes.splice(index, 1);
+        if (posicion != -1) {
+            personajes.splice(posicion, 1);
             alert("Personaje:\n\n" + personaje.toString() + "\n\nfue borrada de la tabla");
             $("#filaSeleccionada").remove();
         }
@@ -334,14 +329,14 @@ var App = (function () {
         localStorage.setItem("personajes", JSON.stringify(personajes));
     };
     App.modificarPersonaje = function (personajes, personaPre, personaPost) {
-        var index = -1;
-        personajes.forEach(function (unPersonaje) {
-            if (unPersonaje.getId() == personaPost.getId()) {
-                index = unPersonaje.getId();
+        var posicion = -1;
+        personajes.forEach(function (value, index) {
+            if (value.getId() == personaPost.getId()) {
+                posicion = index;
             }
         });
-        if (index != -1) {
-            personajes.splice(index, 1);
+        if (posicion != -1) {
+            personajes.splice(posicion, 1);
             personajes.push(personaPost);
             alert("Personaje:\n\n" + personaPre.toString() + "\n\nfue modificada a:\n\n" + personaPost.toString());
             App.modificarFilaSeleccionada(personaPost);

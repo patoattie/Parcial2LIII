@@ -9,14 +9,15 @@ var Personaje = (function () {
     }
     Personaje.getProximoId = function () {
         var proximoID = Number(localStorage.getItem("ID"));
-        if (isNaN(proximoID)) {
+        if (isNaN(proximoID) || proximoID == 0) {
             proximoID = 20000;
         }
         return proximoID;
     };
     Personaje.setProximoId = function () {
         var proximoID = this.getProximoId();
-        localStorage.setItem("ID", String());
+        proximoID++;
+        localStorage.setItem("ID", String(proximoID));
     };
     Personaje.prototype.getId = function () {
         return this.id;

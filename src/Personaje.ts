@@ -21,7 +21,7 @@ class Personaje
     {
         let proximoID:number = Number(localStorage.getItem("ID"));
 
-        if(isNaN(proximoID))
+        if(isNaN(proximoID) || proximoID == 0)
         {
             proximoID = 20000;
         }
@@ -34,8 +34,9 @@ class Personaje
     public static setProximoId():void
     {
         let proximoID:number = this.getProximoId();
+        proximoID++;
 
-        localStorage.setItem("ID", String();
+        localStorage.setItem("ID", String(proximoID));
     }
 
     public getId():number
