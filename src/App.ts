@@ -582,7 +582,8 @@ class App
         {
             if($(this).attr("class") == "traidor")
             {
-                if(datos[$(this).attr("class")])
+                //if(datos[$(this).attr("class")])
+                if(datos.getDinamico($(this).attr("class")))
                 {
                     $(this).text("Si");
                 }
@@ -593,7 +594,8 @@ class App
             }
             else
             {
-                $(this).text(datos[$(this).attr("class")]);
+                //$(this).text(datos[$(this).attr("class")]);
+                $(this).text(datos.getDinamico($(this).attr("class")));
             }
         });
     }

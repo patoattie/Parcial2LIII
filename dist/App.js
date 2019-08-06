@@ -348,7 +348,7 @@ var App = (function () {
         var filaSeleccionada = $("#filaSeleccionada");
         filaSeleccionada.children().each(function () {
             if ($(this).attr("class") == "traidor") {
-                if (datos[$(this).attr("class")]) {
+                if (datos.getDinamico($(this).attr("class"))) {
                     $(this).text("Si");
                 }
                 else {
@@ -356,7 +356,7 @@ var App = (function () {
                 }
             }
             else {
-                $(this).text(datos[$(this).attr("class")]);
+                $(this).text(datos.getDinamico($(this).attr("class")));
             }
         });
     };
