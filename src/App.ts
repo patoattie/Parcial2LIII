@@ -21,6 +21,7 @@ class App
     //Llama a la función traerPersonajes del localStorage, luego con los datos devueltos se crean en el DOM la tabla y el formulario de edición.
     public static traerPersonajes():void
     {
+        App.habilitarMenu($("#btnGetPersonajes"));
         App.activarMenu($("#btnGetPersonajes"));
         //$("#info").html("");
         $("#info").empty();
@@ -30,18 +31,33 @@ class App
         App.crearTabla(personajes);
         App.crearFormulario(personajes);
     
-        $("#btnGetPersonajes").css("pointer-events", "auto");
-        $("#btnAltaPersonaje").css("pointer-events", "auto");
+        //$("#btnGetPersonajes").css("pointer-events", "auto");
+        //$("#btnAltaPersonaje").css("pointer-events", "auto");
+        App.habilitarMenu($("#btnAltaPersonaje"));
     }
     
     public static activarMenu(elemento:JQuery<HTMLElement>):void
     {        
         if($(".active")[0])
         {
-            $(".active").removeAttr("class");
+            $(".active").attr("class", "nav-link");
         }
 
-        elemento.parent().attr("class", "active");
+        elemento.parent().attr("class", "nav-link active");
+    }
+
+    public static habilitarMenu(elemento:JQuery<HTMLElement>):void
+    {        
+        elemento.parent().removeClass("disabled");
+        //elemento.parent().attr("class", "nav-link");
+        elemento.css("pointer-events", "auto");
+    }
+
+    public static deshabilitarMenu(elemento:JQuery<HTMLElement>):void
+    {        
+        //elemento.parent().attr("class", "nav-link disabled");
+        elemento.parent().addClass("disabled");
+        elemento.css("pointer-events", "none");
     }
 
     public static cargarArrayPersonajes():Personaje[]
@@ -80,8 +96,10 @@ class App
 
         App.activarMenu($("#btnAltaPersonaje"));
 
-        $("#btnAltaPersonaje").css("pointer-events", "none");
-        $("#btnEditarPersonaje").css("pointer-events", "none");
+        //$("#btnAltaPersonaje").css("pointer-events", "none");
+        //$("#btnEditarPersonaje").css("pointer-events", "none");
+        App.deshabilitarMenu($("#btnAltaPersonaje"));
+        App.deshabilitarMenu($("#btnEditarPersonaje"));
 
         $("#tablaPersonajes").css("display","none");
         $("#formularioPersonajes").css("display","initial");
@@ -97,8 +115,10 @@ class App
 
         App.activarMenu($("#btnEditarPersonaje"));
 
-        $("#btnAltaPersonaje").css("pointer-events", "none");
-        $("#btnEditarPersonaje").css("pointer-events", "none");
+        //$("#btnAltaPersonaje").css("pointer-events", "none");
+        //$("#btnEditarPersonaje").css("pointer-events", "none");
+        App.deshabilitarMenu($("#btnAltaPersonaje"));
+        App.deshabilitarMenu($("#btnEditarPersonaje"));
 
         $("#tablaPersonajes").css("display","none");
         $("#formularioPersonajes").css("display","initial");
@@ -359,8 +379,10 @@ class App
     {
         App.activarMenu($("#btnGetPersonajes"));
 
-        $("#btnAltaPersonaje").css("pointer-events", "auto");
-        $("#btnEditarPersonaje").css("pointer-events", "none");
+        //$("#btnAltaPersonaje").css("pointer-events", "auto");
+        App.habilitarMenu($("#btnAltaPersonaje"));
+        //$("#btnEditarPersonaje").css("pointer-events", "none");
+        App.deshabilitarMenu($("#btnEditarPersonaje"));
 
         App.blanquearFila();
 
@@ -434,7 +456,8 @@ class App
         //let personajeSeleccionado:Personaje = App.cargarPersonajeSeleccionado();
         let personajeSeleccionado:Personaje = new Personaje();
         //$("#btnEditarPersonaje").removeAttr("disabled");
-        $("#btnEditarPersonaje").css("pointer-events", "auto");
+        //$("#btnEditarPersonaje").css("pointer-events", "auto");
+        App.habilitarMenu($("#btnEditarPersonaje"));
         App.blanquearFila();
         
         filaActual.attr("id", "filaSeleccionada");
