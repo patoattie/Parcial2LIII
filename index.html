@@ -4,10 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <!-- <link rel="stylesheet" href="css/estilos.css"> -->
     <script src="dist/appfull.js"></script>
-    <link rel="stylesheet" href="css/estilos.css">
-    <title>Document</title>
+
+    <title>2do Parcial</title>
 </head>
 <body>
 
@@ -17,15 +27,27 @@
         <input type="button" value="Editar" id="btnEditarPersona" disabled="">
     </div> -->
 
-    <nav class="topnav">
+    <!-- <nav class="navbar navbar-fixed">
         <a href="#traer" id="btnGetPersonajes" style="pointer-events: auto">Traer Personajes</a>
         <a href="#alta" id="btnAltaPersonaje" style="pointer-events: none">Alta</a>
         <a href="#editar" id="btnEditarPersonaje" style="pointer-events: none">Editar</a>
+    </nav> -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">2do Parcial</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li><a href="#traer" id="btnGetPersonajes" style="pointer-events: auto">Traer Personajes</a></li>
+            <li><a href="#alta" id="btnAltaPersonaje" style="pointer-events: none">Alta</a></li>
+            <li><a href="#editar" id="btnEditarPersonaje" style="pointer-events: none">Editar</a></li>
+          </ul>
+        </div>
     </nav>
-
+      
     <hr>
         
-    <div id="info"></div>
+    <div id="info" class="container-fluid" style="margin-top:50px"></div>
 
 </body>
 </html>

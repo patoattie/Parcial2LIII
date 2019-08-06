@@ -22,7 +22,7 @@ var App = (function () {
         if ($(".active")[0]) {
             $(".active").removeAttr("class");
         }
-        elemento.attr("class", "active");
+        elemento.parent().attr("class", "active");
     };
     App.cargarArrayPersonajes = function () {
         var personajes = [];

@@ -41,7 +41,7 @@ class App
             $(".active").removeAttr("class");
         }
 
-        elemento.attr("class", "active");
+        elemento.parent().attr("class", "active");
     }
 
     public static cargarArrayPersonajes():Personaje[]
