@@ -111,69 +111,89 @@ var App = (function () {
     };
     App.crearFormulario = function (personajes) {
         var div = $("#info");
-        div.append("<form id=formularioPersonajes>");
+        div.append("<div id=infoForm>");
+        $("#infoForm").addClass("container");
+        $("#infoForm").append("<form id=formularioPersonajes>");
         var formulario = $("#formularioPersonajes");
         formulario.attr("action", "#");
         formulario.css("display", "none");
-        formulario.append("<div id=grupo>");
-        var grupo = $("#grupo");
-        grupo.addClass("form-group");
-        grupo.append("<h5 id=leyenda>");
-        var leyenda = $("#leyenda");
-        leyenda.text("Personaje");
         personajes[0].getAtributos().forEach(function (value) {
             switch (value) {
                 case "casa":
-                    grupo.append("<div id=grupoCasa>");
+                    formulario.append("<fieldset id=grupoCasa>");
                     var grupoCasa = $("#grupoCasa");
-                    grupoCasa.addClass("form-check-inline");
-                    grupoCasa.append("<h5 id=leyendaCasa>");
+                    grupoCasa.addClass("form-group");
+                    grupoCasa.append("<div id=grupoCasa2>");
+                    var grupoCasa2 = $("#grupoCasa2");
+                    grupoCasa2.addClass("row");
+                    grupoCasa2.append("<legend id=leyendaCasa>");
                     var leyendaCasa = $("#leyendaCasa");
-                    grupoCasa.addClass("grupoInterno");
+                    leyendaCasa.addClass("col-form-label col-sm-2 pt-0");
                     leyendaCasa.text("Casa");
+                    grupoCasa2.append("<div id=grupoCasa3>");
+                    var grupoCasa3 = $("#grupoCasa3");
+                    grupoCasa3.addClass("col-sm-10");
+                    grupoCasa.addClass("grupoInterno");
                     for (var unaCasa in ECasa) {
                         if (isNaN(Number(unaCasa))) {
-                            grupoCasa.append("<label id=etiqueta" + unaCasa + ">");
+                            grupoCasa3.append("<div id=grupoCasa" + unaCasa + ">");
+                            var grupoCasa4 = $("#grupoCasa" + unaCasa);
+                            grupoCasa4.addClass("form-check");
+                            grupoCasa4.append("<input id=opt" + unaCasa + ">");
+                            var optButton = $("#opt" + unaCasa);
+                            grupoCasa4.append("<label id=etiqueta" + unaCasa + ">");
                             var etiquetaCasa = $("#etiqueta" + unaCasa);
                             etiquetaCasa.attr("for", "opt" + unaCasa);
-                            etiquetaCasa.addClass("form-check");
+                            etiquetaCasa.text(unaCasa);
                             etiquetaCasa.addClass("form-check-label");
-                            etiquetaCasa.append("<input id=opt" + unaCasa + ">");
-                            var optButton = $("#opt" + unaCasa);
                             optButton.attr("type", "radio");
                             optButton.attr("name", "casa");
                             optButton.attr("value", unaCasa);
                             optButton.addClass("form-check-input");
-                            optButton.text(" " + unaCasa);
                         }
                     }
                     break;
                 case "traidor":
-                    grupo.append("<div id=grupoTraidor>");
+                    formulario.append("<div id=grupoTraidor>");
                     var grupoTraidor = $("#grupoTraidor");
-                    grupoTraidor.addClass("form-check");
-                    grupoTraidor.addClass("form-check-inline");
-                    grupoTraidor.append("<label id=etiquetaTraidor>");
-                    var etiquetaTraidor = $("#etiquetaTraidor");
-                    etiquetaTraidor.append("<input id=chkTraidor>");
+                    grupoTraidor.addClass("form-group row");
+                    grupoTraidor.append("<div id=grupoTraidor1>");
+                    var grupoTraidor1 = $("#grupoTraidor1");
+                    grupoTraidor1.addClass("col-sm-2");
+                    grupoTraidor1.text("Es traidor");
+                    grupoTraidor.append("<div id=grupoTraidor2>");
+                    var grupoTraidor2 = $("#grupoTraidor2");
+                    grupoTraidor2.addClass("col-sm-10");
+                    grupoTraidor2.append("<div id=grupoTraidor3>");
+                    var grupoTraidor3 = $("#grupoTraidor3");
+                    grupoTraidor3.addClass("form-check");
+                    grupoTraidor3.append("<input id=chkTraidor>");
                     var chkTraidor = $("#chkTraidor");
+                    grupoTraidor3.append("<label id=etiquetaTraidor>");
+                    var etiquetaTraidor = $("#etiquetaTraidor");
                     grupoTraidor.addClass("grupoInterno");
                     chkTraidor.attr("type", "checkbox");
-                    chkTraidor.attr("name", "traidor");
-                    chkTraidor.attr("value", "traidor");
                     chkTraidor.addClass("form-check-input");
                     chkTraidor.text("Es Traidor");
                     etiquetaTraidor.attr("for", "chkTraidor");
                     break;
                 default:
+                    formulario.append("<div id=grupo" + value + ">");
+                    var grupo = $("#grupo" + value);
+                    grupo.addClass("form-group row");
                     var atributoCapitalizado = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
                     grupo.append("<label id=etiqueta" + value + ">");
                     var etiqueta = $("#etiqueta" + value);
-                    grupo.append("<input id=txt" + atributoCapitalizado + ">");
-                    var cuadroTexto = $("#txt" + atributoCapitalizado);
+                    etiqueta.addClass("col-sm-2 col-form-label");
                     etiqueta.attr("for", "txt" + atributoCapitalizado);
-                    etiqueta.text(atributoCapitalizado + ": ");
+                    etiqueta.text(atributoCapitalizado);
+                    grupo.append("<div id=grupoInput" + value + ">");
+                    var grupoInput = $("#grupoInput" + value);
+                    grupoInput.addClass("col-sm-10");
+                    grupoInput.append("<input id=txt" + atributoCapitalizado + ">");
+                    var cuadroTexto = $("#txt" + atributoCapitalizado);
                     cuadroTexto.attr("type", "text");
+                    cuadroTexto.attr("placeholder", "Ingrese " + value);
                     cuadroTexto.addClass("form-control");
                     if (value === "id") {
                         cuadroTexto.attr("readonly", "");
@@ -181,13 +201,16 @@ var App = (function () {
                     break;
             }
         });
-        grupo.append("<button id=btnAgregar>");
+        formulario.append("<div id=grupoButton>");
+        var grupoButton = $("#grupoButton");
+        grupoButton.addClass("form-group row");
+        grupoButton.append("<button id=btnAgregar>");
         var btnAgregar = $("#btnAgregar");
-        grupo.append("<button id=btnModificar>");
+        grupoButton.append("<button id=btnModificar>");
         var btnModificar = $("#btnModificar");
-        grupo.append("<button id=btnBorrar>");
+        grupoButton.append("<button id=btnBorrar>");
         var btnBorrar = $("#btnBorrar");
-        grupo.append("<button id=btnCancelar>");
+        grupoButton.append("<button id=btnCancelar>");
         var btnCancelar = $("#btnCancelar");
         btnAgregar.attr("type", "button");
         btnAgregar.text("Agregar");
@@ -290,22 +313,22 @@ var App = (function () {
         var filaDetalle;
         tablaPersonajes.append("<tbody id=tbody1>");
         var _loop_1 = function (i) {
-            $("#tbody1").append("<tr id=filaDetalle" + i + ">");
-            filaDetalle = $("#filaDetalle" + i);
+            $("#tbody1").append("<tr id=filaDetalle" + datos[i].getId() + ">");
+            filaDetalle = $("#filaDetalle" + datos[i].getId());
             filaDetalle.on("click", App.seleccionarFila);
             datos[i].getAtributos().forEach(function (value) {
                 if (value == "traidor") {
                     if (datos[i].getEsTraidor()) {
-                        filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">Si");
+                        filaDetalle.append("<td id=ColumnaDetalle" + value + datos[i].getId() + ">Si");
                     }
                     else {
-                        filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">No");
+                        filaDetalle.append("<td id=ColumnaDetalle" + value + datos[i].getId() + ">No");
                     }
                 }
                 else {
-                    filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">" + datos[i].getDinamico(value));
+                    filaDetalle.append("<td id=ColumnaDetalle" + value + datos[i].getId() + ">" + datos[i].getDinamico(value));
                 }
-                $("#ColumnaDetalle" + value + i).addClass(value);
+                $("#ColumnaDetalle" + value + datos[i].getId()).addClass(value);
             });
         };
         for (var i = 0; i < datos.length; i++) {
