@@ -5,9 +5,30 @@ var App = (function () {
     function App() {
     }
     App.asignarManejadores = function () {
-        $("#btnGetPersonajes").on("click", App.traerPersonajes);
-        $("#btnAltaPersonaje").on("click", App.altaPersonaje);
-        $("#btnEditarPersonaje").on("click", App.editarPersonaje);
+        $("#btnGetPersonajes").on("click", function (event) {
+            if (event.target.getAttribute("aria-disabled")) {
+                event.preventDefault();
+            }
+            else {
+                App.traerPersonajes();
+            }
+        });
+        $("#btnAltaPersonaje").on("click", function (event) {
+            if (event.target.getAttribute("aria-disabled")) {
+                event.preventDefault();
+            }
+            else {
+                App.altaPersonaje();
+            }
+        });
+        $("#btnEditarPersonaje").on("click", function (event) {
+            if (event.target.getAttribute("aria-disabled")) {
+                event.preventDefault();
+            }
+            else {
+                App.editarPersonaje();
+            }
+        });
     };
     App.traerPersonajes = function () {
         App.habilitarMenu($("#btnGetPersonajes"));
@@ -25,12 +46,16 @@ var App = (function () {
         elemento.parent().attr("class", "nav-link active");
     };
     App.habilitarMenu = function (elemento) {
+        elemento.removeClass("disabled");
         elemento.parent().removeClass("disabled");
-        elemento.css("pointer-events", "auto");
+        elemento.css("cursor", "");
+        elemento.removeAttr("aria-disabled");
     };
     App.deshabilitarMenu = function (elemento) {
+        elemento.addClass("disabled");
         elemento.parent().addClass("disabled");
-        elemento.css("pointer-events", "none");
+        elemento.css("cursor", "not-allowed");
+        elemento.attr("aria-disabled", "true");
     };
     App.cargarArrayPersonajes = function () {
         var personajes = [];

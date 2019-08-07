@@ -13,9 +13,43 @@ class App
     //se instancian los manejadores del evento click de los tres botones del menú.
     public static asignarManejadores():void
     {
-        $("#btnGetPersonajes").on("click", App.traerPersonajes);
+        /*$("#btnGetPersonajes").on("click", App.traerPersonajes);
         $("#btnAltaPersonaje").on("click", App.altaPersonaje);
-        $("#btnEditarPersonaje").on("click", App.editarPersonaje);
+        $("#btnEditarPersonaje").on("click", App.editarPersonaje);*/
+
+        $("#btnGetPersonajes").on("click", function(event)
+        {
+            if(event.target.getAttribute("aria-disabled"))
+            {
+                event.preventDefault();
+            }
+            else
+            {
+                App.traerPersonajes()
+            }
+        });
+        $("#btnAltaPersonaje").on("click", function(event)
+        {
+            if(event.target.getAttribute("aria-disabled"))
+            {
+                event.preventDefault();
+            }
+            else
+            {
+                App.altaPersonaje();
+            }
+        });
+        $("#btnEditarPersonaje").on("click", function(event)
+        {
+            if(event.target.getAttribute("aria-disabled"))
+            {
+                event.preventDefault();
+            }
+            else
+            {
+                App.editarPersonaje();
+            }
+        });
     }
 
     //Llama a la función traerPersonajes del localStorage, luego con los datos devueltos se crean en el DOM la tabla y el formulario de edición.
@@ -48,16 +82,19 @@ class App
 
     public static habilitarMenu(elemento:JQuery<HTMLElement>):void
     {        
+        elemento.removeClass("disabled");
         elemento.parent().removeClass("disabled");
-        //elemento.parent().attr("class", "nav-link");
-        elemento.css("pointer-events", "auto");
+        elemento.css("cursor", "");
+        elemento.removeAttr("aria-disabled");
     }
-
+    
+    //https://css-tricks.com/how-to-disable-links/
     public static deshabilitarMenu(elemento:JQuery<HTMLElement>):void
     {        
-        //elemento.parent().attr("class", "nav-link disabled");
+        elemento.addClass("disabled");
         elemento.parent().addClass("disabled");
-        elemento.css("pointer-events", "none");
+        elemento.css("cursor", "not-allowed");
+        elemento.attr("aria-disabled", "true");
     }
 
     public static cargarArrayPersonajes():Personaje[]
