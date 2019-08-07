@@ -305,52 +305,69 @@ var App = /** @class */ (function () {
         var formulario = $("#formularioPersonajes");
         formulario.attr("action", "#");
         formulario.css("display", "none");
-        formulario.append("<fieldset id=grupo>");
+        //formulario.append("<fieldset id=grupo>");
+        formulario.append("<div id=grupo>");
         var grupo = $("#grupo");
-        grupo.append("<legend id=leyenda>");
+        grupo.addClass("form-group");
+        //grupo.append("<legend id=leyenda>");
+        grupo.append("<h5 id=leyenda>");
         var leyenda = $("#leyenda");
         leyenda.text("Personaje");
         //for(let atributo in personajes[0].getAtributos())
         personajes[0].getAtributos().forEach(function (value) {
             switch (value) {
                 case "casa":
-                    grupo.append("<fieldset id=grupoCasa>");
+                    //grupo.append("<fieldset id=grupoCasa>");
+                    grupo.append("<div id=grupoCasa>");
                     var grupoCasa = $("#grupoCasa");
-                    grupoCasa.append("<legend id=leyendaCasa>");
+                    grupoCasa.addClass("form-check-inline");
+                    //grupoCasa.append("<legend id=leyendaCasa>");
+                    grupoCasa.append("<h5 id=leyendaCasa>");
                     var leyendaCasa = $("#leyendaCasa");
-                    grupoCasa.attr("class", "grupoInterno");
+                    grupoCasa.addClass("grupoInterno");
                     leyendaCasa.text("Casa");
                     for (var unaCasa in ECasa) {
                         if (isNaN(Number(unaCasa))) //Para que no traiga los índices
                          {
-                            grupoCasa.append("<input id=opt" + unaCasa + ">");
-                            var optButton = $("#opt" + unaCasa);
+                            //grupoCasa.append("<input id=opt" + unaCasa + ">");
+                            //let optButton:JQuery<HTMLElement> = $("#opt" + unaCasa);
                             grupoCasa.append("<label id=etiqueta" + unaCasa + ">");
                             var etiquetaCasa = $("#etiqueta" + unaCasa);
                             etiquetaCasa.attr("for", "opt" + unaCasa);
-                            etiquetaCasa.text(unaCasa);
+                            //etiquetaCasa.text(unaCasa);
+                            etiquetaCasa.addClass("form-check");
+                            etiquetaCasa.addClass("form-check-label");
+                            etiquetaCasa.append("<input id=opt" + unaCasa + ">");
+                            var optButton = $("#opt" + unaCasa);
                             optButton.attr("type", "radio");
                             optButton.attr("name", "casa");
                             optButton.attr("value", unaCasa);
+                            optButton.addClass("form-check-input");
                             optButton.text(" " + unaCasa);
-                            grupoCasa.append("<br>");
+                            //grupoCasa.append("<br>");
                         }
                     }
                     break;
                 case "traidor":
-                    grupo.append("<fieldset id=grupoTraidor>");
+                    //grupo.append("<fieldset id=grupoTraidor>");
+                    grupo.append("<div id=grupoTraidor>");
                     var grupoTraidor = $("#grupoTraidor");
-                    grupoTraidor.append("<input id=chkTraidor>");
-                    var chkTraidor = $("#chkTraidor");
+                    grupoTraidor.addClass("form-check");
+                    grupoTraidor.addClass("form-check-inline");
+                    //grupoTraidor.append("<input id=chkTraidor>");
+                    //let chkTraidor:JQuery<HTMLElement> = $("#chkTraidor");
                     grupoTraidor.append("<label id=etiquetaTraidor>");
                     var etiquetaTraidor = $("#etiquetaTraidor");
-                    grupoTraidor.attr("class", "grupoInterno");
+                    etiquetaTraidor.append("<input id=chkTraidor>");
+                    var chkTraidor = $("#chkTraidor");
+                    grupoTraidor.addClass("grupoInterno");
                     chkTraidor.attr("type", "checkbox");
                     chkTraidor.attr("name", "traidor");
                     chkTraidor.attr("value", "traidor");
+                    chkTraidor.addClass("form-check-input");
                     chkTraidor.text("Es Traidor");
                     etiquetaTraidor.attr("for", "chkTraidor");
-                    etiquetaTraidor.text("Es Traidor");
+                    //etiquetaTraidor.text("Es Traidor");
                     break;
                 default:
                     var atributoCapitalizado = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(); //Primer letra en mayuscula, resto minuscula
@@ -361,34 +378,39 @@ var App = /** @class */ (function () {
                     etiqueta.attr("for", "txt" + atributoCapitalizado);
                     etiqueta.text(atributoCapitalizado + ": ");
                     cuadroTexto.attr("type", "text");
+                    cuadroTexto.addClass("form-control");
                     if (value === "id") {
                         cuadroTexto.attr("readonly", "");
                     }
                     break;
             }
         });
-        grupo.append("<input id=btnAgregar>");
+        grupo.append("<button id=btnAgregar>");
         var btnAgregar = $("#btnAgregar");
-        grupo.append("<input id=btnModificar>");
+        grupo.append("<button id=btnModificar>");
         var btnModificar = $("#btnModificar");
-        grupo.append("<input id=btnBorrar>");
+        grupo.append("<button id=btnBorrar>");
         var btnBorrar = $("#btnBorrar");
-        grupo.append("<input id=btnCancelar>");
+        grupo.append("<button id=btnCancelar>");
         var btnCancelar = $("#btnCancelar");
         btnAgregar.attr("type", "button");
-        btnAgregar.val("Agregar");
+        //btnAgregar.val("Agregar");
+        btnAgregar.text("Agregar");
         btnAgregar.addClass("btn btn-primary");
         btnAgregar.on("click", App.opcionAgregarPersonaje);
         btnModificar.attr("type", "button");
-        btnModificar.val("Modificar");
+        //btnModificar.val("Modificar");
+        btnModificar.text("Modificar");
         btnModificar.addClass("btn btn-primary");
         btnModificar.on("click", App.opcionModificarPersonaje);
         btnBorrar.attr("type", "button");
-        btnBorrar.val("Borrar");
+        //btnBorrar.val("Borrar");
+        btnBorrar.text("Borrar");
         btnBorrar.addClass("btn btn-danger");
         btnBorrar.on("click", App.opcionBorrarPersonaje);
         btnCancelar.attr("type", "button");
-        btnCancelar.val("Cancelar");
+        //btnCancelar.val("Cancelar");
+        btnCancelar.text("Cancelar");
         btnCancelar.addClass("btn btn-secondary");
         btnCancelar.on("click", App.ocultarFormulario);
     };
