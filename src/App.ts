@@ -75,10 +75,11 @@ class App
     {        
         if($(".active")[0])
         {
-            $(".active").attr("class", "nav-link");
+            //$(".active").attr("class", "nav-link");
+            $(".active").addClass("active");
         }
 
-        elemento.parent().attr("class", "nav-link active");
+        //elemento.parent().attr("class", "nav-link active");
     }
 
     public static habilitarMenu(elemento:JQuery<HTMLElement>):void
@@ -132,7 +133,7 @@ class App
     {
         let personajes:Personaje[] = App.cargarArrayPersonajes();
 
-        App.activarMenu($("#btnAltaPersonaje"));
+        //App.activarMenu($("#btnAltaPersonaje"));
 
         //$("#btnAltaPersonaje").css("pointer-events", "none");
         //$("#btnEditarPersonaje").css("pointer-events", "none");
@@ -151,7 +152,7 @@ class App
     {
         let personajes:Personaje[] = App.cargarArrayPersonajes();
 
-        App.activarMenu($("#btnEditarPersonaje"));
+        //App.activarMenu($("#btnEditarPersonaje"));
 
         //$("#btnAltaPersonaje").css("pointer-events", "none");
         //$("#btnEditarPersonaje").css("pointer-events", "none");
@@ -173,15 +174,18 @@ class App
         div.append("<div id=divTablaPersonajes>");
         
         //div.append("<table>");
-        $("#divTablaPersonajes").addClass("table-responsive");
         $("#divTablaPersonajes").append("<table id=tablaPersonajes>")
         //let tablaPersonajes:JQuery<HTMLElement> = $("#info").children("table");
         let tablaPersonajes:JQuery<HTMLElement> = $("#tablaPersonajes");
 
         //tablaPersonajes.attr("id", "tablaPersonajes");
-        $("#tablaPersonajes").attr("border", "1px");
+        //$("#tablaPersonajes").attr("border", "1px");
         $("#tablaPersonajes").addClass("tablaPersonajes");
         $("#tablaPersonajes").addClass("table");
+        //$("#tablaPersonajes").addClass("table-responsive");
+        $("#tablaPersonajes").addClass("table-striped");
+        $("#tablaPersonajes").addClass("table-bordered");   
+        $("#tablaPersonajes").addClass("table-hover");   
         //$("#tablaPersonajes").css("border-collapse", "collapse");
 
         if(personajes[0].getId() == null) //Si el servidor no trae nada creo la estructura vacía.
@@ -305,18 +309,22 @@ class App
 
         btnAgregar.attr("type", "button");
         btnAgregar.val("Agregar");
+        btnAgregar.addClass("btn btn-primary");
         btnAgregar.on("click", App.opcionAgregarPersonaje);
 
         btnModificar.attr("type", "button");
         btnModificar.val("Modificar");
+        btnModificar.addClass("btn btn-primary");
         btnModificar.on("click", App.opcionModificarPersonaje);
 
         btnBorrar.attr("type", "button");
         btnBorrar.val("Borrar");
+        btnBorrar.addClass("btn btn-danger");
         btnBorrar.on("click", App.opcionBorrarPersonaje);
 
         btnCancelar.attr("type", "button");
         btnCancelar.val("Cancelar");
+        btnCancelar.addClass("btn btn-secondary");
         btnCancelar.on("click", App.ocultarFormulario);
     }
 
@@ -422,8 +430,6 @@ class App
     //Se blanquea cualquier fila que se haya previamente seleccionado.
     public static ocultarFormulario():void
     {
-        App.activarMenu($("#btnGetPersonajes"));
-
         //$("#btnAltaPersonaje").css("pointer-events", "auto");
         App.habilitarMenu($("#btnAltaPersonaje"));
         //$("#btnEditarPersonaje").css("pointer-events", "none");
@@ -433,6 +439,8 @@ class App
 
         $("#tablaPersonajes").css("display","table");
         $("#formularioPersonajes").css("display","none");
+
+        App.activarMenu($("#btnGetPersonajes"));
     }
 
     //Crea la fila de cabecera, con tantas columnas como atributos posea la personaje, en la tabla de personajes.
@@ -505,6 +513,7 @@ class App
     //Quita el atributo id de la fila seleccionada.
     public static blanquearFila():void
     {
+        $("#filaSeleccionada").removeClass("table-primary");
         $("#filaSeleccionada").removeAttr("id");
         localStorage.removeItem("personajeSeleccionado");
     }
@@ -523,6 +532,7 @@ class App
         App.blanquearFila();
         
         filaActual.attr("id", "filaSeleccionada");
+        filaActual.addClass("table-primary");
 
         //Recorro las columnas de la fila seleccionada, guardando un atributo por columna en personajeSeleccionado.
         filaActual.children().each(function()

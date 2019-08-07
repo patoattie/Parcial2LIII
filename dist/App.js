@@ -41,9 +41,8 @@ var App = (function () {
     };
     App.activarMenu = function (elemento) {
         if ($(".active")[0]) {
-            $(".active").attr("class", "nav-link");
+            $(".active").addClass("active");
         }
-        elemento.parent().attr("class", "nav-link active");
     };
     App.habilitarMenu = function (elemento) {
         elemento.removeClass("disabled");
@@ -77,7 +76,6 @@ var App = (function () {
     };
     App.altaPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
-        App.activarMenu($("#btnAltaPersonaje"));
         App.deshabilitarMenu($("#btnAltaPersonaje"));
         App.deshabilitarMenu($("#btnEditarPersonaje"));
         $("#tablaPersonajes").css("display", "none");
@@ -86,7 +84,6 @@ var App = (function () {
     };
     App.editarPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
-        App.activarMenu($("#btnEditarPersonaje"));
         App.deshabilitarMenu($("#btnAltaPersonaje"));
         App.deshabilitarMenu($("#btnEditarPersonaje"));
         $("#tablaPersonajes").css("display", "none");
@@ -97,12 +94,13 @@ var App = (function () {
         var puedeCrearDetalle = true;
         var div = $("#info");
         div.append("<div id=divTablaPersonajes>");
-        $("#divTablaPersonajes").addClass("table-responsive");
         $("#divTablaPersonajes").append("<table id=tablaPersonajes>");
         var tablaPersonajes = $("#tablaPersonajes");
-        $("#tablaPersonajes").attr("border", "1px");
         $("#tablaPersonajes").addClass("tablaPersonajes");
         $("#tablaPersonajes").addClass("table");
+        $("#tablaPersonajes").addClass("table-striped");
+        $("#tablaPersonajes").addClass("table-bordered");
+        $("#tablaPersonajes").addClass("table-hover");
         if (personajes[0].getId() == null) {
             puedeCrearDetalle = false;
         }
@@ -187,15 +185,19 @@ var App = (function () {
         var btnCancelar = $("#btnCancelar");
         btnAgregar.attr("type", "button");
         btnAgregar.val("Agregar");
+        btnAgregar.addClass("btn btn-primary");
         btnAgregar.on("click", App.opcionAgregarPersonaje);
         btnModificar.attr("type", "button");
         btnModificar.val("Modificar");
+        btnModificar.addClass("btn btn-primary");
         btnModificar.on("click", App.opcionModificarPersonaje);
         btnBorrar.attr("type", "button");
         btnBorrar.val("Borrar");
+        btnBorrar.addClass("btn btn-danger");
         btnBorrar.on("click", App.opcionBorrarPersonaje);
         btnCancelar.attr("type", "button");
         btnCancelar.val("Cancelar");
+        btnCancelar.addClass("btn btn-secondary");
         btnCancelar.on("click", App.ocultarFormulario);
     };
     App.mostrarFormulario = function (personajes, personajeSeleccionado) {
@@ -263,12 +265,12 @@ var App = (function () {
         });
     };
     App.ocultarFormulario = function () {
-        App.activarMenu($("#btnGetPersonajes"));
         App.habilitarMenu($("#btnAltaPersonaje"));
         App.deshabilitarMenu($("#btnEditarPersonaje"));
         App.blanquearFila();
         $("#tablaPersonajes").css("display", "table");
         $("#formularioPersonajes").css("display", "none");
+        App.activarMenu($("#btnGetPersonajes"));
     };
     App.crearCabecera = function (personajes, tablaPersonajes) {
         tablaPersonajes.append("<thead id=thead1>");
@@ -305,6 +307,7 @@ var App = (function () {
         }
     };
     App.blanquearFila = function () {
+        $("#filaSeleccionada").removeClass("table-primary");
         $("#filaSeleccionada").removeAttr("id");
         localStorage.removeItem("personajeSeleccionado");
     };
@@ -314,6 +317,7 @@ var App = (function () {
         App.habilitarMenu($("#btnEditarPersonaje"));
         App.blanquearFila();
         filaActual.attr("id", "filaSeleccionada");
+        filaActual.addClass("table-primary");
         filaActual.children().each(function () {
             if ($(this).attr("class") == "traidor") {
                 personajeSeleccionado.setEsTraidorStr($(this).text());

@@ -206,9 +206,10 @@ var App = /** @class */ (function () {
     };
     App.activarMenu = function (elemento) {
         if ($(".active")[0]) {
-            $(".active").attr("class", "nav-link");
+            //$(".active").attr("class", "nav-link");
+            $(".active").addClass("active");
         }
-        elemento.parent().attr("class", "nav-link active");
+        //elemento.parent().attr("class", "nav-link active");
     };
     App.habilitarMenu = function (elemento) {
         elemento.removeClass("disabled");
@@ -246,7 +247,7 @@ var App = /** @class */ (function () {
     //sin parámetro. Lo invoca la opción de Alta del menú
     App.altaPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
-        App.activarMenu($("#btnAltaPersonaje"));
+        //App.activarMenu($("#btnAltaPersonaje"));
         //$("#btnAltaPersonaje").css("pointer-events", "none");
         //$("#btnEditarPersonaje").css("pointer-events", "none");
         App.deshabilitarMenu($("#btnAltaPersonaje"));
@@ -259,7 +260,7 @@ var App = /** @class */ (function () {
     //pasándole por parámetro la personaje que se quiere editar. Lo invoca la opción de Editar del menú
     App.editarPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
-        App.activarMenu($("#btnEditarPersonaje"));
+        //App.activarMenu($("#btnEditarPersonaje"));
         //$("#btnAltaPersonaje").css("pointer-events", "none");
         //$("#btnEditarPersonaje").css("pointer-events", "none");
         App.deshabilitarMenu($("#btnAltaPersonaje"));
@@ -274,14 +275,17 @@ var App = /** @class */ (function () {
         var div = $("#info");
         div.append("<div id=divTablaPersonajes>");
         //div.append("<table>");
-        $("#divTablaPersonajes").addClass("table-responsive");
         $("#divTablaPersonajes").append("<table id=tablaPersonajes>");
         //let tablaPersonajes:JQuery<HTMLElement> = $("#info").children("table");
         var tablaPersonajes = $("#tablaPersonajes");
         //tablaPersonajes.attr("id", "tablaPersonajes");
-        $("#tablaPersonajes").attr("border", "1px");
+        //$("#tablaPersonajes").attr("border", "1px");
         $("#tablaPersonajes").addClass("tablaPersonajes");
         $("#tablaPersonajes").addClass("table");
+        //$("#tablaPersonajes").addClass("table-responsive");
+        $("#tablaPersonajes").addClass("table-striped");
+        $("#tablaPersonajes").addClass("table-bordered");
+        $("#tablaPersonajes").addClass("table-hover");
         //$("#tablaPersonajes").css("border-collapse", "collapse");
         if (personajes[0].getId() == null) //Si el servidor no trae nada creo la estructura vacía.
          {
@@ -373,15 +377,19 @@ var App = /** @class */ (function () {
         var btnCancelar = $("#btnCancelar");
         btnAgregar.attr("type", "button");
         btnAgregar.val("Agregar");
+        btnAgregar.addClass("btn btn-primary");
         btnAgregar.on("click", App.opcionAgregarPersonaje);
         btnModificar.attr("type", "button");
         btnModificar.val("Modificar");
+        btnModificar.addClass("btn btn-primary");
         btnModificar.on("click", App.opcionModificarPersonaje);
         btnBorrar.attr("type", "button");
         btnBorrar.val("Borrar");
+        btnBorrar.addClass("btn btn-danger");
         btnBorrar.on("click", App.opcionBorrarPersonaje);
         btnCancelar.attr("type", "button");
         btnCancelar.val("Cancelar");
+        btnCancelar.addClass("btn btn-secondary");
         btnCancelar.on("click", App.ocultarFormulario);
     };
     //Arma el formulario de edición de personajes.
@@ -462,7 +470,6 @@ var App = /** @class */ (function () {
     //Oculta el formulario de edición y muestra la tabla de personajes.
     //Se blanquea cualquier fila que se haya previamente seleccionado.
     App.ocultarFormulario = function () {
-        App.activarMenu($("#btnGetPersonajes"));
         //$("#btnAltaPersonaje").css("pointer-events", "auto");
         App.habilitarMenu($("#btnAltaPersonaje"));
         //$("#btnEditarPersonaje").css("pointer-events", "none");
@@ -470,6 +477,7 @@ var App = /** @class */ (function () {
         App.blanquearFila();
         $("#tablaPersonajes").css("display", "table");
         $("#formularioPersonajes").css("display", "none");
+        App.activarMenu($("#btnGetPersonajes"));
     };
     //Crea la fila de cabecera, con tantas columnas como atributos posea la personaje, en la tabla de personajes.
     App.crearCabecera = function (personajes, tablaPersonajes) {
@@ -530,6 +538,7 @@ var App = /** @class */ (function () {
     };
     //Quita el atributo id de la fila seleccionada.
     App.blanquearFila = function () {
+        $("#filaSeleccionada").removeClass("table-primary");
         $("#filaSeleccionada").removeAttr("id");
         localStorage.removeItem("personajeSeleccionado");
     };
@@ -545,6 +554,7 @@ var App = /** @class */ (function () {
         App.habilitarMenu($("#btnEditarPersonaje"));
         App.blanquearFila();
         filaActual.attr("id", "filaSeleccionada");
+        filaActual.addClass("table-primary");
         //Recorro las columnas de la fila seleccionada, guardando un atributo por columna en personajeSeleccionado.
         filaActual.children().each(function () {
             if ($(this).attr("class") == "traidor") {
