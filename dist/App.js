@@ -96,11 +96,13 @@ var App = (function () {
     App.crearTabla = function (personajes) {
         var puedeCrearDetalle = true;
         var div = $("#info");
-        div.append("<table>");
-        var tablaPersonajes = $("#info").children("table");
-        tablaPersonajes.attr("id", "tablaPersonajes");
-        $("#tablaPersonajes").attr({ "border": "1px", "class": "tablaPersonajes" });
-        $("#tablaPersonajes").css("border-collapse", "collapse");
+        div.append("<div id=divTablaPersonajes>");
+        $("#divTablaPersonajes").addClass("table-responsive");
+        $("#divTablaPersonajes").append("<table id=tablaPersonajes>");
+        var tablaPersonajes = $("#tablaPersonajes");
+        $("#tablaPersonajes").attr("border", "1px");
+        $("#tablaPersonajes").addClass("tablaPersonajes");
+        $("#tablaPersonajes").addClass("table");
         if (personajes[0].getId() == null) {
             puedeCrearDetalle = false;
         }
@@ -269,16 +271,18 @@ var App = (function () {
         $("#formularioPersonajes").css("display", "none");
     };
     App.crearCabecera = function (personajes, tablaPersonajes) {
-        tablaPersonajes.append("<tr id=filaCabecera>");
+        tablaPersonajes.append("<thead id=thead1>");
+        $("#thead1").append("<tr id=filaCabecera>");
         var fila = $("#filaCabecera");
         personajes[0].getAtributos().forEach(function (value) {
-            fila.append("<th>" + value);
+            fila.append("<th id=ColumnaCabecera" + value + ">" + value);
         });
     };
     App.crearDetalle = function (tablaPersonajes, datos) {
         var filaDetalle;
+        tablaPersonajes.append("<tbody id=tbody1>");
         var _loop_1 = function (i) {
-            tablaPersonajes.append("<tr id=filaDetalle" + i + ">");
+            $("#tbody1").append("<tr id=filaDetalle" + i + ">");
             filaDetalle = $("#filaDetalle" + i);
             filaDetalle.on("click", App.seleccionarFila);
             datos[i].getAtributos().forEach(function (value) {
@@ -293,7 +297,7 @@ var App = (function () {
                 else {
                     filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">" + datos[i].getDinamico(value));
                 }
-                $("#ColumnaDetalle" + value + i).attr("class", value);
+                $("#ColumnaDetalle" + value + i).addClass(value);
             });
         };
         for (var i = 0; i < datos.length; i++) {
@@ -302,6 +306,7 @@ var App = (function () {
     };
     App.blanquearFila = function () {
         $("#filaSeleccionada").removeAttr("id");
+        localStorage.removeItem("personajeSeleccionado");
     };
     App.seleccionarFila = function () {
         var filaActual = $(this);

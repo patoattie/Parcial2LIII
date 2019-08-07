@@ -165,6 +165,7 @@ var App = /** @class */ (function () {
         /*$("#btnGetPersonajes").on("click", App.traerPersonajes);
         $("#btnAltaPersonaje").on("click", App.altaPersonaje);
         $("#btnEditarPersonaje").on("click", App.editarPersonaje);*/
+        //Si el elemento está deshabilitado (tiene el atributo aria-disabled) entonces bloqueo el evento click
         $("#btnGetPersonajes").on("click", function (event) {
             if (event.target.getAttribute("aria-disabled")) {
                 event.preventDefault();
@@ -271,11 +272,17 @@ var App = /** @class */ (function () {
     App.crearTabla = function (personajes) {
         var puedeCrearDetalle = true; //Si no tengo elementos desde el servidor cambia a false.
         var div = $("#info");
-        div.append("<table>");
-        var tablaPersonajes = $("#info").children("table");
-        tablaPersonajes.attr("id", "tablaPersonajes");
-        $("#tablaPersonajes").attr({ "border": "1px", "class": "tablaPersonajes" });
-        $("#tablaPersonajes").css("border-collapse", "collapse");
+        div.append("<div id=divTablaPersonajes>");
+        //div.append("<table>");
+        $("#divTablaPersonajes").addClass("table-responsive");
+        $("#divTablaPersonajes").append("<table id=tablaPersonajes>");
+        //let tablaPersonajes:JQuery<HTMLElement> = $("#info").children("table");
+        var tablaPersonajes = $("#tablaPersonajes");
+        //tablaPersonajes.attr("id", "tablaPersonajes");
+        $("#tablaPersonajes").attr("border", "1px");
+        $("#tablaPersonajes").addClass("tablaPersonajes");
+        $("#tablaPersonajes").addClass("table");
+        //$("#tablaPersonajes").css("border-collapse", "collapse");
         if (personajes[0].getId() == null) //Si el servidor no trae nada creo la estructura vacía.
          {
             puedeCrearDetalle = false;
@@ -466,19 +473,30 @@ var App = /** @class */ (function () {
     };
     //Crea la fila de cabecera, con tantas columnas como atributos posea la personaje, en la tabla de personajes.
     App.crearCabecera = function (personajes, tablaPersonajes) {
-        tablaPersonajes.append("<tr id=filaCabecera>");
+        //tablaPersonajes.append("<tr id=filaCabecera>");
+        tablaPersonajes.append("<thead id=thead1>");
+        $("#thead1").append("<tr id=filaCabecera>");
+        //tablaPersonajes.append("<div id=filaCabecera>");
         var fila = $("#filaCabecera");
+        //fila.addClass("row");
         //for(let atributo in personajes[0].getAtributos())
         personajes[0].getAtributos().forEach(function (value) {
-            fila.append("<th>" + value);
+            //fila.append("<th>" + value);
+            fila.append("<th id=ColumnaCabecera" + value + ">" + value);
+            //fila.append("<div id=ColumnaCabecera" + value + ">" + value);
+            //$("#ColumnaCabecera" + value).addClass("col-sm-2");
         });
     };
     //Crea tantas fila de detalle en la tabla de personajes como personajes haya cargadas.
     App.crearDetalle = function (tablaPersonajes, datos) {
         var filaDetalle;
+        tablaPersonajes.append("<tbody id=tbody1>");
         var _loop_1 = function (i) {
-            tablaPersonajes.append("<tr id=filaDetalle" + i + ">");
+            //tablaPersonajes.append("<tr id=filaDetalle" + i + ">");
+            $("#tbody1").append("<tr id=filaDetalle" + i + ">");
+            //tablaPersonajes.append("<div id=filaDetalle" + i + ">");
             filaDetalle = $("#filaDetalle" + i);
+            //filaDetalle.addClass("row");
             //let columna;
             filaDetalle.on("click", App.seleccionarFila);
             //for(let atributo in datos[i].getAtributos())
@@ -489,16 +507,21 @@ var App = /** @class */ (function () {
                 if (value == "traidor") {
                     if (datos[i].getEsTraidor()) {
                         filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">Si");
+                        //filaDetalle.append("<div id=ColumnaDetalle" + value + i + ">Si");
                     }
                     else {
                         filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">No");
+                        //filaDetalle.append("<div id=ColumnaDetalle" + value + i + ">No");
                     }
                 }
                 else {
                     filaDetalle.append("<td id=ColumnaDetalle" + value + i + ">" + datos[i].getDinamico(value));
+                    //filaDetalle.append("<div id=ColumnaDetalle" + value + i + ">" + datos[i].getDinamico(value));
                 }
                 //columna = filaDetalle.children("td");
-                $("#ColumnaDetalle" + value + i).attr("class", value);
+                //$("#ColumnaDetalle" + value + i).attr("class", value);
+                $("#ColumnaDetalle" + value + i).addClass(value);
+                //$("#ColumnaDetalle" + value + i).addClass("col-sm-2");
             });
         };
         for (var i = 0; i < datos.length; i++) {
@@ -508,6 +531,7 @@ var App = /** @class */ (function () {
     //Quita el atributo id de la fila seleccionada.
     App.blanquearFila = function () {
         $("#filaSeleccionada").removeAttr("id");
+        localStorage.removeItem("personajeSeleccionado");
     };
     //Cuando el usuario hace click en una fila de detalle de la tabla de personajes,
     //la función le setea, previo a blanquear si hay otra fila antes seleccionada, 
@@ -544,7 +568,7 @@ var App = /** @class */ (function () {
         var personajes = App.cargarArrayPersonajes();
         App.borrarPersonaje(personajes, App.cargarPersonajeSeleccionado());
     };
-    //Llamador usado por el evento dla opción de Modificar del formulario
+    //Llamador usado por el evento de la opción de Modificar del formulario
     App.opcionModificarPersonaje = function () {
         var personajes = App.cargarArrayPersonajes();
         App.modificarPersonaje(personajes, App.cargarPersonajeSeleccionado(), App.personajeEditado(personajes));
