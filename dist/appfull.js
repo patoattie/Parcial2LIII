@@ -203,13 +203,13 @@ var App = /** @class */ (function () {
         //$("#btnGetPersonajes").css("pointer-events", "auto");
         //$("#btnAltaPersonaje").css("pointer-events", "auto");
         App.habilitarMenu($("#btnAltaPersonaje"));
+        App.deshabilitarMenu($("#btnEditarPersonaje"));
     };
     App.activarMenu = function (elemento) {
-        if ($(".active")[0]) {
-            //$(".active").attr("class", "nav-link");
-            $(".active").addClass("active");
-        }
-        //elemento.parent().attr("class", "nav-link active");
+        elemento.parent().addClass("active");
+    };
+    App.desactivarMenu = function (elemento) {
+        elemento.parent().removeClass("active");
     };
     App.habilitarMenu = function (elemento) {
         elemento.removeClass("disabled");
@@ -252,6 +252,7 @@ var App = /** @class */ (function () {
         //$("#btnEditarPersonaje").css("pointer-events", "none");
         App.deshabilitarMenu($("#btnAltaPersonaje"));
         App.deshabilitarMenu($("#btnEditarPersonaje"));
+        App.desactivarMenu($("#btnGetPersonajes"));
         $("#tablaPersonajes").css("display", "none");
         $("#formularioPersonajes").css("display", "initial");
         App.mostrarFormulario(personajes);
@@ -265,6 +266,7 @@ var App = /** @class */ (function () {
         //$("#btnEditarPersonaje").css("pointer-events", "none");
         App.deshabilitarMenu($("#btnAltaPersonaje"));
         App.deshabilitarMenu($("#btnEditarPersonaje"));
+        App.desactivarMenu($("#btnGetPersonajes"));
         $("#tablaPersonajes").css("display", "none");
         $("#formularioPersonajes").css("display", "initial");
         App.mostrarFormulario(personajes, App.cargarPersonajeSeleccionado());

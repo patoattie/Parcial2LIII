@@ -69,17 +69,17 @@ class App
         //$("#btnGetPersonajes").css("pointer-events", "auto");
         //$("#btnAltaPersonaje").css("pointer-events", "auto");
         App.habilitarMenu($("#btnAltaPersonaje"));
+        App.deshabilitarMenu($("#btnEditarPersonaje"));
     }
     
     public static activarMenu(elemento:JQuery<HTMLElement>):void
     {        
-        if($(".active")[0])
-        {
-            //$(".active").attr("class", "nav-link");
-            $(".active").addClass("active");
-        }
+        elemento.parent().addClass("active");
+    }
 
-        //elemento.parent().attr("class", "nav-link active");
+    public static desactivarMenu(elemento:JQuery<HTMLElement>):void
+    {        
+        elemento.parent().removeClass("active");
     }
 
     public static habilitarMenu(elemento:JQuery<HTMLElement>):void
@@ -139,6 +139,7 @@ class App
         //$("#btnEditarPersonaje").css("pointer-events", "none");
         App.deshabilitarMenu($("#btnAltaPersonaje"));
         App.deshabilitarMenu($("#btnEditarPersonaje"));
+        App.desactivarMenu($("#btnGetPersonajes"));
 
         $("#tablaPersonajes").css("display","none");
         $("#formularioPersonajes").css("display","initial");
@@ -158,6 +159,7 @@ class App
         //$("#btnEditarPersonaje").css("pointer-events", "none");
         App.deshabilitarMenu($("#btnAltaPersonaje"));
         App.deshabilitarMenu($("#btnEditarPersonaje"));
+        App.desactivarMenu($("#btnGetPersonajes"));
 
         $("#tablaPersonajes").css("display","none");
         $("#formularioPersonajes").css("display","initial");
